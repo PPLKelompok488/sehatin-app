@@ -138,30 +138,38 @@ export default function Register() {
                 </section>
 
                 {/* Right Section */}
-                <section className="flex items-center justify-center p-6 md:p-12 lg:p-16 bg-background">
-                    <div className="w-full max-w-2xl space-y-10">
-                        <div className="lg:hidden flex justify-center mb-8">
-                            <div className="flex items-center gap-2">
-                                <img src="/images/sehatin.png" alt="Sehatin Logo" className="h-8" />
+                <section className="relative flex flex-col min-h-[100dvh] bg-background">
+                    {/* Fixed Stepper Navbar */}
+                    <div className="sticky top-0 z-20 w-full bg-background/95 backdrop-blur-xl px-6 md:px-12 py-8 lg:py-0 lg:px-16 lg:pt-24">
+                        <div className="w-full max-w-2xl mx-auto">
+                            <div className="lg:hidden flex justify-center mb-6">
+                                <div className="flex items-center gap-2">
+                                    <img src="/images/sehatin.png" alt="Sehatin Logo" className="h-8" />
+                                </div>
                             </div>
-                        </div>
 
-                        {/* Stepper */}
-                        <div className="flex items-center justify-between mb-8">
-                            <div className="flex flex-col items-center gap-2">
-                                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${step === 1 ? 'bg-primary text-on-primary ring-4 ring-primary/10' : 'bg-primary text-on-primary'}`}>
-                                    {step > 1 ? <Check className="size-5" /> : '1'}
+                            {/* Stepper */}
+                            <div className="flex items-center justify-between">
+                                <div className="flex flex-col items-center gap-2">
+                                    <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${step === 1 ? 'bg-primary text-on-primary ring-4 ring-primary/10' : 'bg-primary text-on-primary'}`}>
+                                        {step > 1 ? <Check className="size-5" /> : '1'}
+                                    </div>
+                                    <span className={`text-xs font-semibold ${step >= 1 ? 'text-primary' : 'text-on-surface-variant'}`}>Buat Akun</span>
                                 </div>
-                                <span className={`text-xs font-semibold ${step >= 1 ? 'text-primary' : 'text-on-surface-variant'}`}>Buat Akun</span>
-                            </div>
-                            <div className={`flex-1 h-px stepper-rail mx-4 -mt-6 ${step > 1 ? 'active' : ''}`}></div>
-                            <div className="flex flex-col items-center gap-2">
-                                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${step === 2 ? 'bg-primary text-on-primary ring-4 ring-primary/10' : 'bg-surface-container text-on-surface-variant'}`}>
-                                    2
+                                <div className={`flex-1 h-px stepper-rail mx-4 -mt-5 ${step > 1 ? 'active' : ''}`}></div>
+                                <div className="flex flex-col items-center gap-2">
+                                    <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${step === 2 ? 'bg-primary text-on-primary ring-4 ring-primary/10' : 'bg-surface-container text-on-surface-variant'}`}>
+                                        2
+                                    </div>
+                                    <span className={`text-xs font-semibold ${step === 2 ? 'text-primary' : 'text-on-surface-variant'}`}>Data Diri</span>
                                 </div>
-                                <span className={`text-xs font-semibold ${step === 2 ? 'text-primary' : 'text-on-surface-variant'}`}>Data Diri</span>
                             </div>
                         </div>
+                    </div>
+
+                    {/* Form Container */}
+                    <div className="flex-1 flex flex-col justify-center px-6 py-10 md:px-12 lg:px-16">
+                        <div className="w-full max-w-2xl mx-auto space-y-10">
 
                         {step === 1 ? (
                             <div className="space-y-10 animate-in fade-in slide-in-from-right-4 duration-300">
@@ -428,6 +436,7 @@ export default function Register() {
                                 </form>
                             </div>
                         )}
+                        </div>
                     </div>
                 </section>
             </main>
