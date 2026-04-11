@@ -13,12 +13,61 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $password = bcrypt('Password123@');
 
+        // Admin
         User::factory()->create([
-            'name' => 'vio',
-            'email' => 'viosalman@gmail.com',
-            'password'=> bcrypt('password123'),
+            'nik' => '1000000000000001',
+            'name' => 'Admin Sehatin',
+            'email' => 'admin@gmail.com',
+            'password' => $password,
+            'role' => 'admin',
         ]);
+
+        // Seed Polis first
+        $polis = \App\Models\Poli::factory(3)->create();
+
+        // Doctors
+        $doctorsData = [
+            ['name' => 'Bryan', 'email' => 'bryan@gmail.com', 'spec' => 'Spesialis Penyakit Dalam'],
+            ['name' => 'Diva', 'email' => 'diva@gmail.com', 'spec' => 'Spesialis Gigi'],
+            ['name' => 'Yudi', 'email' => 'yudi@gmail.com', 'spec' => 'Spesialis Penyakit Anak'],
+        ];
+
+        foreach ($doctorsData as $index => $data) {
+            $user = User::factory()->create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => $password,
+                'role' => 'doctor',
+            ]);
+
+            \App\Models\Doctor::factory()->create([
+                'user_id' => $user->id,
+                'poli_id' => $polis[$index % 3]->id,
+                'specialization' => $data['spec'],
+            ]);
+        }
+
+        // Patients
+        $patientsData = [
+            ['name' => 'Vio', 'email' => 'vio@gmail.com'],
+            ['name' => 'Qalam', 'email' => 'qalam@gmail.com'],
+            ['name' => 'Clara', 'email' => 'clara@gmail.com'],
+            ['name' => 'Fahry', 'email' => 'fahry@gmail.com'],
+        ];
+
+        foreach ($patientsData as $data) {
+            $user = User::factory()->create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => $password,
+                'role' => 'patient',
+            ]);
+
+            \App\Models\Patient::factory()->create([
+                'user_id' => $user->id,
+            ]);
+        }
     }
 }

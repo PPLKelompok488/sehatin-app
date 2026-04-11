@@ -7,12 +7,21 @@
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 
         @routes
         @viteReactRefresh
         @vite(['resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
         @inertiaHead
+
+        <style id="dynamic-theme">
+            :root {
+                --primary: {{ $page['props']['themes']['primary_color'] ?? \App\Models\Theme::getByKey('primary_color', '#5ba7f7') }};
+                --secondary: {{ $page['props']['themes']['secondary_color'] ?? \App\Models\Theme::getByKey('secondary_color', '#475569') }};
+                --ring: {{ $page['props']['themes']['primary_color'] ?? \App\Models\Theme::getByKey('primary_color', '#5ba7f7') }};
+            }
+        </style>
     </head>
     <body class="font-sans antialiased">
         @inertia

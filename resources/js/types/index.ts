@@ -25,6 +25,11 @@ export interface SharedData {
     name: string;
     quote: { message: string; author: string };
     auth: Auth;
+    themes: {
+        primary_color: string;
+        secondary_color: string;
+        brand_logo: string | null;
+    };
     [key: string]: unknown;
 }
 
