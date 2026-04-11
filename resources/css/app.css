@@ -7,7 +7,7 @@
     /* Override rdp selected color to Sehatin Primary Blue */
     .rdp-day_selected, 
     .rdp-day_selected:hover,
-    [aria-selected="true"],
+    .rdp-day[aria-selected="true"],
     .rdp-selected {
         background-color: var(--primary) !important;
         color: white !important;
@@ -50,7 +50,11 @@
     --color-success: #10b981;
     --color-warning: #f59e0b;
 
-    /* Accents */
+    /* Accents & UI */
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
     --color-purple: #a855f7;
     --color-orange: #f97316;
 
@@ -92,6 +96,11 @@
 
     --destructive: #ef4444;
     --destructive-foreground: #ffffff;
+
+    --popover: #ffffff;
+    --popover-foreground: #0f172a;
+    --accent: #f1f5f9;
+    --accent-foreground: var(--primary);
 
     --radius: 0.75rem;
 
