@@ -60,7 +60,11 @@ export default function RegisterStep1({ data, setData, errors, clearErrors, onNe
                             <Input
                                 id="phone"
                                 value={data.phone}
-                                onChange={(e) => { setData('phone', e.target.value); clearErrors('phone'); }}
+                                onChange={(e) => { 
+                                    const val = e.target.value.replace(/\D/g, ''); 
+                                    setData('phone', val); 
+                                    clearErrors('phone'); 
+                                }}
                                 placeholder="08xx-xxxx-xxxx"
                                 type="tel"
                                 icon={Phone}
@@ -77,7 +81,11 @@ export default function RegisterStep1({ data, setData, errors, clearErrors, onNe
                                 <Input
                                     id="password"
                                     value={data.password}
-                                    onChange={(e) => { setData('password', e.target.value); clearErrors('password'); }}
+                                    onChange={(e) => { 
+                                        const val = e.target.value.replace(/\s/g, '');
+                                        setData('password', val); 
+                                        clearErrors('password'); 
+                                    }}
                                     placeholder="••••••••"
                                     type={showPassword ? 'text' : 'password'}
                                     icon={Lock}
@@ -100,7 +108,11 @@ export default function RegisterStep1({ data, setData, errors, clearErrors, onNe
                                 <Input
                                     id="password_confirmation"
                                     value={data.password_confirmation}
-                                    onChange={(e) => { setData('password_confirmation', e.target.value); clearErrors('password_confirmation'); }}
+                                    onChange={(e) => { 
+                                        const val = e.target.value.replace(/\s/g, '');
+                                        setData('password_confirmation', val); 
+                                        clearErrors('password_confirmation'); 
+                                    }}
                                     placeholder="••••••••"
                                     type={showConfirmPassword ? 'text' : 'password'}
                                     icon={LockKeyhole}

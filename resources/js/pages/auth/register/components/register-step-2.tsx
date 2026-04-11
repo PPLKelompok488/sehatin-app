@@ -34,7 +34,11 @@ export default function RegisterStep2({ data, setData, errors, clearErrors, proc
                         <Input
                             id="nik"
                             value={data.nik}
-                            onChange={(e) => { setData('nik', e.target.value); clearErrors('nik'); }}
+                            onChange={(e) => { 
+                                const val = e.target.value.replace(/\D/g, '');
+                                setData('nik', val); 
+                                clearErrors('nik'); 
+                            }}
                             placeholder="16 digit nomor induk kependudukan"
                             type="text"
                             maxLength={16}
