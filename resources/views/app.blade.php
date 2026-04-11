@@ -14,6 +14,14 @@
         @viteReactRefresh
         @vite(['resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
         @inertiaHead
+
+        <style id="dynamic-theme">
+            :root {
+                --primary: {{ $page['props']['settings']['primary_color'] ?? \App\Models\Setting::getByKey('primary_color', '#5ba7f7') }};
+                --secondary: {{ $page['props']['settings']['secondary_color'] ?? \App\Models\Setting::getByKey('secondary_color', '#475569') }};
+                --ring: {{ $page['props']['settings']['primary_color'] ?? \App\Models\Setting::getByKey('primary_color', '#5ba7f7') }};
+            }
+        </style>
     </head>
     <body class="font-sans antialiased">
         @inertia

@@ -50,6 +50,11 @@ class HandleInertiaRequests extends Middleware
                 'error' => $request->session()->get('error'),
                 'warning' => $request->session()->get('warning'),
             ],
+            'settings' => [
+                'primary_color' => \App\Models\Setting::getByKey('primary_color', '#5ba7f7'),
+                'secondary_color' => \App\Models\Setting::getByKey('secondary_color', '#475569'),
+                'brand_logo' => \App\Models\Setting::getByKey('brand_logo', '/sehatin.png'),
+            ],
         ];
     }
 }
