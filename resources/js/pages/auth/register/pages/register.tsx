@@ -39,6 +39,17 @@ export default function Register() {
         }
     };
 
+    React.useEffect(() => {
+        const step1Fields: RegisterFieldName[] = ['name', 'email', 'phone', 'password', 'password_confirmation'];
+        const hasStep1Errors = Object.keys(errors).some((key) => 
+            step1Fields.includes(key as RegisterFieldName)
+        );
+        
+        if (hasStep1Errors && step === 2) {
+            setStep(1);
+        }
+    }, [errors, step]);
+
     // Helper to clear errors from child components safely
     const handleClearErrors = (key?: RegisterFieldName) => {
         if (key) {
