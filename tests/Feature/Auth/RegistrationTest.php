@@ -15,7 +15,7 @@ test('new users can register', function () {
         'password' => 'password',
         'password_confirmation' => 'password',
         'date_of_birth' => '1990-01-01',
-        'gender' => 'male',
+        'gender' => 'pria',
         'address' => 'Jl. Kebon Jeruk No. 12',
         'blood_type' => 'O',
     ]);
