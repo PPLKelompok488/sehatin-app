@@ -30,14 +30,14 @@ export default function AppLayout({ children }: AppLayoutProps) {
         const role = user.role as 'admin' | 'doctor' | 'patient';
         const items = {
             patient: [
-                { title: 'Kunjungan', url: '/dashboard', icon: Activity },
+                { title: 'Kunjungan', url: '/kunjungan', icon: Activity },
                 { title: 'Buat Kunjungan', url: '/kunjungan/create', icon: PlusCircle },
             ],
             doctor: [
-                { title: 'Jadwal Saya', url: '/dashboard', icon: Calendar },
+                { title: 'Jadwal Saya', url: '/jadwal', icon: Calendar },
             ],
             admin: [
-                { title: 'Dashboard', url: '/dashboard', icon: LayoutDashboard },
+                { title: 'Dashboard', url: '/admin-dashboard', icon: LayoutDashboard },
                 { title: 'Poli', url: '/poli', icon: Activity },
                 { title: 'Dokter', url: '/dokter', icon: Stethoscope },
                 { title: 'Jadwal', url: '/jadwal-admin', icon: Calendar },
@@ -68,10 +68,10 @@ export default function AppLayout({ children }: AppLayoutProps) {
                                         <Link
                                             key={item.url}
                                             href={item.url}
-                                            className={`relative flex items-center h-full px-2 sm:px-1 text-sm font-bold transition-all duration-300 gap-2 ${
+                                            className={`relative flex items-center h-full px-2 sm:px-1 text-sm transition-all duration-300 gap-2 ${
                                                 isActive 
-                                                ? 'text-primary' 
-                                                : 'text-on-surface-variant hover:text-primary'
+                                                ? 'text-primary font-extrabold' 
+                                                : 'text-on-surface-variant hover:text-primary font-semibold'
                                             }`}
                                         >
                                             <Icon className={`size-5 transition-transform ${isActive ? 'scale-110' : 'group-hover:scale-110'}`} />
@@ -92,7 +92,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
                             <div className="flex items-center gap-4">
                                 <div className="hidden lg:flex flex-col items-end">
                                     <span className="text-sm font-bold text-on-surface leading-none">{user.name}</span>
-                                    <span className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mt-1.5 opacity-60">
+                                    <span className="text-[12px] font-bold text-on-surface-variant capitalize mt-1.5 opacity-60">
                                         {user.role}
                                     </span>
                                 </div>
@@ -100,9 +100,9 @@ export default function AppLayout({ children }: AppLayoutProps) {
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
                                         <button className="flex items-center gap-3 p-1 rounded-full hover:bg-surface-container transition-all focus:outline-hidden ring-offset-2 focus:ring-2 focus:ring-primary/20 group">
-                                            <Avatar className="size-10 border-2 border-white ring-1 ring-outline-variant/10 group-hover:ring-primary/30 transition-all">
+                                            <Avatar className="size-10 transition-all hover:opacity-80 border-none ring-0">
                                                 <AvatarImage src={user.avatar || ''} alt={user.name} />
-                                                <AvatarFallback className="bg-primary/5 text-primary font-bold">
+                                                <AvatarFallback className="bg-primary/10 text-primary font-bold">
                                                     {getInitials(user.name)}
                                                 </AvatarFallback>
                                             </Avatar>

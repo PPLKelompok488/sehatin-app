@@ -1,6 +1,7 @@
 import { Head, useForm } from '@inertiajs/react';
 import { Check } from 'lucide-react';
 import * as React from 'react';
+import { BrandLogo } from '@/components/ui/brand-logo';
 
 import RegisterStep1 from '../components/register-step-1';
 import RegisterStep2 from '../components/register-step-2';
@@ -73,9 +74,7 @@ export default function Register() {
                         />
                     </div>
                     <div className="relative z-10 flex flex-col justify-center h-full text-left items-start">
-                        <div className="flex items-center gap-2 mb-16">
-                            <img src="/images/sehatin.png" alt="Sehatin Logo" className="h-10 filter grayscale brightness-0 invert" />
-                        </div>
+                        <BrandLogo className="mb-16" iconClassName="grayscale brightness-0 invert" size={10} />
                         <h1 className="font-headline text-5xl font-extrabold text-white leading-tight tracking-tight mb-6 max-w-md">
                             Sehatin adalah platform kesehatan digital untuk klinik kecil.
                         </h1>
@@ -90,7 +89,7 @@ export default function Register() {
                     <div className="sticky top-0 z-20 w-full bg-background/95 backdrop-blur-xl px-6 md:px-12 py-8 lg:py-0 lg:px-16 lg:pt-24">
                         <div className="w-full max-w-2xl mx-auto">
                             <div className="lg:hidden flex justify-center mb-6">
-                                <img src="/images/sehatin.png" alt="Sehatin Logo" className="h-8" />
+                                <BrandLogo size={8} />
                             </div>
 
                             <div className="flex items-center justify-between">
