@@ -25,6 +25,11 @@ export interface SharedData {
     name: string;
     quote: { message: string; author: string };
     auth: Auth;
+    themes: {
+        primary_color: string;
+        secondary_color: string;
+        brand_logo: string | null;
+    };
     [key: string]: unknown;
 }
 
@@ -33,7 +38,6 @@ export interface User {
     name: string;
     email: string;
     avatar?: string;
-    email_verified_at: string | null;
     created_at: string;
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...

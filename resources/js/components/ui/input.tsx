@@ -1,18 +1,31 @@
 import * as React from 'react';
+import { LucideIcon } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 
-const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<'input'>>(({ className, type, ...props }, ref) => {
+export interface InputProps extends React.ComponentProps<'input'> {
+    icon?: LucideIcon;
+}
+
+const Input = React.forwardRef<HTMLInputElement, InputProps>(({ className, type, icon: Icon, ...props }, ref) => {
     return (
-        <input
-            type={type}
-            className={cn(
-                'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
-                className,
+        <div className="relative group flex w-full items-center">
+            {Icon && (
+                <div className="absolute left-4 flex items-center pointer-events-none text-on-surface-variant/60 group-focus-within:text-primary transition-colors z-10">
+                    <Icon className="h-5 w-5" />
+                </div>
             )}
-            ref={ref}
-            {...props}
-        />
+            <input
+                type={type}
+                className={cn(
+                    'flex h-12 w-full rounded-lg border-none bg-surface-container py-3 text-base text-on-surface placeholder:text-on-surface-variant/50 transition-all duration-200 focus-visible:bg-white focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
+                    Icon ? 'pl-[2.75rem] pr-4' : 'px-4',
+                    className,
+                )}
+                ref={ref}
+                {...props}
+            />
+        </div>
     );
 });
 

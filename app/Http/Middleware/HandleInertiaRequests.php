@@ -38,13 +38,23 @@ class HandleInertiaRequests extends Middleware
     {
         [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
 
-        return array_merge(parent::share($request), [
+        return [
             ...parent::share($request),
             'name' => config('app.name'),
             'quote' => ['message' => trim($message), 'author' => trim($author)],
             'auth' => [
                 'user' => $request->user(),
             ],
-        ]);
+            'flash' => [
+                'success' => $request->session()->get('success'),
+                'error' => $request->session()->get('error'),
+                'warning' => $request->session()->get('warning'),
+            ],
+            'themes' => [
+                'primary_color' => \App\Models\Theme::getByKey('primary_color', '#5ba7f7'),
+                'secondary_color' => \App\Models\Theme::getByKey('secondary_color', '#475569'),
+                'brand_logo' => \App\Models\Theme::getByKey('brand_logo', '/images/sehatin.png'),
+            ],
+        ];
     }
 }
