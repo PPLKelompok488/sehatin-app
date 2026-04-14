@@ -38,11 +38,8 @@ export interface User {
     name: string;
     email: string;
     avatar?: string;
-<<<<<<< HEAD
     role: string;
-=======
->>>>>>> 385c1b6596241d1b1a6bcb5f76b9d61f89ade07e
     created_at: string;
     updated_at: string;
-    [key: string]: unknown; // This allows for additional properties...
+    [key: string]: unknown;
 }
