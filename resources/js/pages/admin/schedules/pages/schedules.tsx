@@ -19,10 +19,21 @@ import {
     type ScheduleSession,
 } from '../components/schedule-session-card';
 
+import { ScheduleFormDrawer } from '../components/schedule-form-drawer';
+import * as React from 'react';
+
 const DAYS = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'] as const;
+
+interface Doctor {
+    id: number;
+    name: string;
+    avatar_url?: string;
+    specialization: string;
+}
 
 interface Props {
     schedules: ScheduleSession[];
+    doctors: Doctor[];
 }
 
 function groupByDay(schedules: ScheduleSession[]) {
@@ -33,8 +44,9 @@ function groupByDay(schedules: ScheduleSession[]) {
     return grouped;
 }
 
-export default function Schedules({ schedules }: Props) {
+export default function Schedules({ schedules, doctors }: Props) {
     const grouped = groupByDay(schedules);
+    const [drawerOpen, setDrawerOpen] = React.useState(false);
 
     return (
         <AppLayout>
@@ -45,7 +57,7 @@ export default function Schedules({ schedules }: Props) {
                 subtitle="Kelola jadwal praktik dokter. Atur ketersediaan dan jam layanan untuk memastikan pasien mendapatkan perawatan tepat waktu."
                 button={{
                     label: 'Tambah Jadwal',
-                    onClick: () => { },
+                    onClick: () => setDrawerOpen(true),
                     show: true,
                 }}
             />
@@ -74,7 +86,7 @@ export default function Schedules({ schedules }: Props) {
                         const activeCount = sessions.filter((s) => s.is_active).length;
 
                         return (
-                            <AccordionItem key={day} value={day}>
+                            <AccordionItem key={day} value={day} className="rounded-none">
                                 <AccordionTrigger>
                                     <div className="flex items-center gap-3">
                                         <span>{day}</span>
@@ -102,6 +114,12 @@ export default function Schedules({ schedules }: Props) {
                     })}
                 </Accordion>
             )}
+
+            <ScheduleFormDrawer 
+                open={drawerOpen} 
+                onOpenChange={setDrawerOpen} 
+                doctors={doctors} 
+            />
         </AppLayout>
     );
 }
