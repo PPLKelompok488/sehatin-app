@@ -15,29 +15,29 @@ import {
     EmptyTitle,
 } from '@/components/ui/empty';
 import {
-    ScheduleSessionCard,
-    type ScheduleSession,
-} from '../components/schedule-session-card';
+    SchedulesSessionCard,
+    type SchedulesSession,
+} from '../components/schedules-session-card';
 
-import { ScheduleFormDrawer } from '../components/schedule-form-drawer';
+import { SchedulesFormSheet } from '../components/schedules-form-sheet';
 import * as React from 'react';
 
 const DAYS = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'] as const;
 
 interface Doctor {
-    id: number;
+    id: number; 
     name: string;
     avatar_url?: string;
     specialization: string;
 }
 
 interface Props {
-    schedules: ScheduleSession[];
+    schedules: SchedulesSession[];
     doctors: Doctor[];
 }
 
-function groupByDay(schedules: ScheduleSession[]) {
-    const grouped: Record<string, ScheduleSession[]> = {};
+function groupByDay(schedules: SchedulesSession[]) {
+    const grouped: Record<string, SchedulesSession[]> = {};
     for (const day of DAYS) {
         grouped[day] = schedules.filter((s) => s.day_of_week === day);
     }
@@ -86,7 +86,7 @@ export default function Schedules({ schedules, doctors }: Props) {
                         const activeCount = sessions.filter((s) => s.is_active).length;
 
                         return (
-                            <AccordionItem key={day} value={day} className="rounded-none">
+                            <AccordionItem key={day} value={day}>
                                 <AccordionTrigger>
                                     <div className="flex items-center gap-3">
                                         <span>{day}</span>
@@ -102,7 +102,7 @@ export default function Schedules({ schedules, doctors }: Props) {
                                 <AccordionContent>
                                     <div className="space-y-3">
                                         {sessions.map((session) => (
-                                            <ScheduleSessionCard
+                                            <SchedulesSessionCard
                                                 key={session.id}
                                                 session={session}
                                             />
@@ -115,7 +115,7 @@ export default function Schedules({ schedules, doctors }: Props) {
                 </Accordion>
             )}
 
-            <ScheduleFormDrawer 
+            <SchedulesFormSheet 
                 open={drawerOpen} 
                 onOpenChange={setDrawerOpen} 
                 doctors={doctors} 

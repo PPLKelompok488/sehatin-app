@@ -1,6 +1,6 @@
 import { ChevronRight, User } from 'lucide-react';
 
-export interface ScheduleSession {
+export interface SchedulesSession {
     id: number;
     doctor_id: number;
     day_of_week: string;
@@ -15,8 +15,8 @@ export interface ScheduleSession {
     }[];
 }
 
-interface ScheduleSessionCardProps {
-    session: ScheduleSession;
+interface SchedulesSessionCardProps {
+    session: SchedulesSession;
     onClick?: () => void;
 }
 
@@ -24,7 +24,7 @@ function formatTime(time: string): string {
     return time.slice(0, 5);
 }
 
-export function ScheduleSessionCard({ session, onClick }: ScheduleSessionCardProps) {
+export function SchedulesSessionCard({ session, onClick }: SchedulesSessionCardProps) {
     const doctorCount = session.doctors?.length ?? 1;
 
     return (

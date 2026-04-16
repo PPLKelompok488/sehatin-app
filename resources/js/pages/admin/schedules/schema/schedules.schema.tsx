@@ -1,4 +1,5 @@
-export interface ScheduleFormData {
+export interface SchedulesFormData {
+    [key: string]: string | number | boolean | number[] | undefined;
     day_of_week: string;
     start_time: string;
     end_time: string;
@@ -7,12 +8,12 @@ export interface ScheduleFormData {
     doctor_ids: number[];
 }
 
-export type ScheduleFieldName = keyof ScheduleFormData;
+export type SchedulesFieldName = keyof SchedulesFormData;
 
 export const validateSchedule = (
-    data: ScheduleFormData,
-    setError: (key: any, message: string) => void,
-    clearErrors: (key?: any) => void
+    data: SchedulesFormData,
+    setError: (key: keyof SchedulesFormData, message: string) => void,
+    clearErrors: (key?: keyof SchedulesFormData) => void
 ): boolean => {
     clearErrors();
     let isValid = true;
