@@ -4,7 +4,6 @@
 @plugin 'tailwindcss-animate';
 
 @layer base {
-    /* Override rdp selected color to Sehatin Primary Blue */
     .rdp-day_selected, 
     .rdp-day_selected:hover,
     .rdp-day[aria-selected="true"],

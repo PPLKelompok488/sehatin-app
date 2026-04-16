@@ -35,7 +35,7 @@ export function ScheduleSessionCard({ session, onClick }: ScheduleSessionCardPro
         >
             <div className="flex flex-1 items-center min-w-0 flex-wrap sm:flex-nowrap">
                 <div className="flex-1 min-w-[150px] pr-6">
-                    <div className="text-[11px] font-semibold text-on-surface-variant/60 mb-1.5 capitalize">
+                    <div className="text-xs font-semibold text-on-surface-variant/60 mb-1.5 capitalize">
                         Waktu Praktek
                     </div>
                     <p className="text-lg font-bold text-on-surface tracking-tight">
@@ -46,7 +46,7 @@ export function ScheduleSessionCard({ session, onClick }: ScheduleSessionCardPro
                 <div className="hidden sm:block h-10 w-px bg-on-surface-variant/10 mr-8" />
 
                 <div className="flex-1 min-w-[150px] pr-6">
-                    <div className="text-[11px] font-semibold text-on-surface-variant/60 mb-1.5 capitalize">
+                    <div className="text-xs font-semibold text-on-surface-variant/60 mb-1.5 capitalize">
                         Durasi Konsultasi
                     </div>
                     <p className="text-lg font-bold text-on-surface tracking-tight">
@@ -57,7 +57,7 @@ export function ScheduleSessionCard({ session, onClick }: ScheduleSessionCardPro
                 <div className="hidden sm:block h-10 w-px bg-on-surface-variant/10 mr-8" />
 
                 <div className="flex-1 min-w-[150px]">
-                    <div className="text-[11px] font-semibold text-on-surface-variant/60 mb-1.5 capitalize">
+                    <div className="text-xs font-semibold text-on-surface-variant/60 mb-1.5 capitalize">
                         Dokter
                     </div>
                     <div className="flex items-center gap-2">
@@ -93,9 +93,6 @@ export function ScheduleSessionCard({ session, onClick }: ScheduleSessionCardPro
                                         </div>
                                     )}
                                 </div>
-                                {doctorCount === 1 && (
-                                    <span className="ml-3 text-base font-bold text-on-surface">1 Dokter</span>
-                                )}
                             </div>
                         ) : (
                             <div className="flex items-center gap-2">
