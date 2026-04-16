@@ -1,4 +1,4 @@
-import { ChevronRight, Clock, Timer, User } from 'lucide-react';
+import { ChevronRight, User } from 'lucide-react';
 
 export interface ScheduleSession {
     id: number;
