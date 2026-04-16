@@ -6,6 +6,10 @@ export interface SchedulesFormData {
     slot_duration: number;
     is_active: boolean;
     doctor_ids: number[];
+    old_day_of_week?: string;
+    old_start_time?: string;
+    old_end_time?: string;
+    old_slot_duration?: number;
 }
 
 export type SchedulesFieldName = keyof SchedulesFormData;

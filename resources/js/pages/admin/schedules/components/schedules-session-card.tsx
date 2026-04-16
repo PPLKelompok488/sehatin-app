@@ -1,4 +1,4 @@
-import { ChevronRight, User } from 'lucide-react';
+import { Edit, User } from 'lucide-react';
 
 export interface SchedulesSession {
     id: number;
@@ -107,9 +107,8 @@ export function SchedulesSessionCard({ session, onClick }: SchedulesSessionCardP
                     </div>
                 </div>
             </div>
-
-            <div className="ml-4 shrink-0">
-                <ChevronRight className="size-6 text-on-surface-variant/40 transition-transform group-hover:translate-x-1 group-hover:text-primary" />
+            <div className="ml-4 shrink-0 transition-transform group-hover:scale-110">
+                <Edit className="size-5 text-on-surface-variant/40 group-hover:text-primary transition-colors" />
             </div>
         </button>
     );

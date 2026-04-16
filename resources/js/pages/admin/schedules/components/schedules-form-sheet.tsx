@@ -29,32 +29,36 @@ interface SchedulesFormSheetProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     doctors: Doctor[];
+    title: string;
+    description: string;
+    submitLabel: string;
+    data: SchedulesFormData;
+    setData: <K extends keyof SchedulesFormData>(key: K, value: SchedulesFormData[K]) => void;
+    errors: Partial<Record<keyof SchedulesFormData, string>>;
+    processing: boolean;
+    submitDisabled?: boolean;
+    onSubmit: (e: React.FormEvent) => void;
+    onDelete?: () => void;
 }
 
 const DURATIONS = [15, 20, 30, 45, 60];
 const DAYS = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
 
-export function SchedulesFormSheet({ open, onOpenChange, doctors }: SchedulesFormSheetProps) {
-    const { data, setData, post, processing, errors, setError, clearErrors, reset } = useForm<SchedulesFormData>({
-        day_of_week: 'Senin',
-        start_time: '09:00',
-        end_time: '12:00',
-        slot_duration: 30,
-        is_active: true,
-        doctor_ids: [],
-    });
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (validateSchedule(data, setError as (key: keyof SchedulesFormData, message: string) => void, clearErrors as (key?: keyof SchedulesFormData) => void)) {
-            post(route('admin.schedules.store'), {
-                onSuccess: () => {
-                    onOpenChange(false);
-                    reset();
-                },
-            });
-        }
-    };
+export function SchedulesFormSheet({ 
+    open, 
+    onOpenChange, 
+    doctors,
+    title,
+    description,
+    submitLabel,
+    data,
+    setData,
+    errors,
+    processing,
+    onSubmit,
+    onDelete,
+    submitDisabled
+}: SchedulesFormSheetProps) {
 
     const toggleDoctor = (doctorId: number) => {
         const currentIds = [...data.doctor_ids];
@@ -67,35 +71,44 @@ export function SchedulesFormSheet({ open, onOpenChange, doctors }: SchedulesFor
         setData('doctor_ids', currentIds);
     };
 
-    const selectedDoctors = doctors.filter(d => data.doctor_ids.includes(d.id));
+    const selectedDoctors = doctors.filter(d => 
+        data.doctor_ids.some(id => Number(id) === Number(d.id))
+    );
 
     return (
         <FormSheet
             open={open}
             onOpenChange={onOpenChange}
-            title="Tambah Jadwal Praktik"
-            description="Sesuai hari operasional dan rotasi tenaga medis."
+            title={title}
+            description={description}
             icon={Calendar}
             footer={
                 <div className="flex flex-col gap-4">
-                    <Button type="submit" form="schedule-form" disabled={processing} className="w-full h-14 rounded-xl text-base font-bold shadow-lg shadow-primary/20">
-                        Simpan Perubahan
+                    <Button type="submit" form="schedule-form" disabled={processing || submitDisabled} className="w-full h-14 rounded-xl text-base font-bold shadow-lg shadow-primary/20">
+                        {submitLabel}
                     </Button>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className={cn("grid gap-4", onDelete ? "grid-cols-2" : "grid-cols-1")}>
                         <SheetClose asChild>
                             <Button type="button" variant="secondary" className="h-14 rounded-xl font-bold bg-surface-container hover:bg-outline-variant border-none">
                                 Batal
                             </Button>
                         </SheetClose>
-                        <Button type="button" variant="ghost" className="h-14 rounded-xl font-bold text-destructive hover:bg-destructive/5 transition-colors gap-2">
-                            <Trash2 className="size-5" />
-                            Hapus Sesi
-                        </Button>
+                        {onDelete && (
+                            <Button 
+                                type="button" 
+                                variant="ghost" 
+                                onClick={onDelete}
+                                className="h-14 rounded-xl font-bold text-destructive hover:bg-destructive/5 transition-colors gap-2"
+                            >
+                                <Trash2 className="size-5" />
+                                Hapus Sesi
+                            </Button>
+                        )}
                     </div>
                 </div>
             }
         >
-            <form id="schedule-form" onSubmit={handleSubmit} className="space-y-8">
+            <form id="schedule-form" onSubmit={onSubmit} className="space-y-8">
                 {/* Hari Praktik */}
                 <div className="space-y-4">
                     <Label className="text-sm font-bold text-on-surface/80 px-1">Hari Praktik</Label>
@@ -220,7 +233,7 @@ export function SchedulesFormSheet({ open, onOpenChange, doctors }: SchedulesFor
                                 <span className="font-bold text-on-surface/60 group-hover:text-primary transition-colors">Tambah Dokter Ke Sesi</span>
                             </SelectTrigger>
                             <SelectContent>
-                                {doctors.filter(d => !data.doctor_ids.includes(d.id)).map((doc) => (
+                                {doctors.filter(d => !data.doctor_ids.some(id => Number(id) === Number(d.id))).map((doc) => (
                                     <SelectItem hideIndicator key={doc.id} value={doc.id.toString()}>{doc.name}</SelectItem>
                                 ))}
                             </SelectContent>

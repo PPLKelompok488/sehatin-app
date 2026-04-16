@@ -7,19 +7,16 @@ import {
 } from '@/components/ui/accordion';
 import AppLayout from '@/layouts/app-layout';
 import { Head } from '@inertiajs/react';
-import { CalendarOff } from 'lucide-react';
+import { CalendarOff} from 'lucide-react';
 import {
     Empty,
     EmptyDescription,
     EmptyMedia,
     EmptyTitle,
 } from '@/components/ui/empty';
-import {
-    SchedulesSessionCard,
-    type SchedulesSession,
-} from '../components/schedules-session-card';
-
-import { SchedulesFormSheet } from '../components/schedules-form-sheet';
+import { SchedulesFormSheetAdd } from '../components/schedules-form-sheet-add';
+import { SchedulesFormSheetEdit } from '../components/schedules-form-sheet-edit';
+import { SchedulesSessionCard, type SchedulesSession } from '../components/schedules-session-card';
 import * as React from 'react';
 
 const DAYS = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'] as const;
@@ -46,7 +43,14 @@ function groupByDay(schedules: SchedulesSession[]) {
 
 export default function Schedules({ schedules, doctors }: Props) {
     const grouped = groupByDay(schedules);
-    const [drawerOpen, setDrawerOpen] = React.useState(false);
+    const [addOpen, setAddOpen] = React.useState(false);
+    const [editOpen, setEditOpen] = React.useState(false);
+    const [selectedSession, setSelectedSession] = React.useState<SchedulesSession | null>(null);
+
+    const handleEdit = (session: SchedulesSession) => {
+        setSelectedSession(session);
+        setEditOpen(true);
+    };
 
     return (
         <AppLayout>
@@ -57,7 +61,7 @@ export default function Schedules({ schedules, doctors }: Props) {
                 subtitle="Kelola jadwal praktik dokter. Atur ketersediaan dan jam layanan untuk memastikan pasien mendapatkan perawatan tepat waktu."
                 button={{
                     label: 'Tambah Jadwal',
-                    onClick: () => setDrawerOpen(true),
+                    onClick: () => setAddOpen(true),
                     show: true,
                 }}
             />
@@ -105,6 +109,7 @@ export default function Schedules({ schedules, doctors }: Props) {
                                             <SchedulesSessionCard
                                                 key={session.id}
                                                 session={session}
+                                                onClick={() => handleEdit(session)}
                                             />
                                         ))}
                                     </div>
@@ -115,10 +120,18 @@ export default function Schedules({ schedules, doctors }: Props) {
                 </Accordion>
             )}
 
-            <SchedulesFormSheet 
-                open={drawerOpen} 
-                onOpenChange={setDrawerOpen} 
-                doctors={doctors} 
+            <SchedulesFormSheetAdd 
+                open={addOpen} 
+                onOpenChange={setAddOpen} 
+                doctors={doctors}
+            />
+
+            <SchedulesFormSheetEdit
+                key={selectedSession ? `${selectedSession.id}-${selectedSession.doctors?.length ?? 0}` : 'none'}
+                open={editOpen}
+                onOpenChange={setEditOpen}
+                doctors={doctors}
+                session={selectedSession}
             />
         </AppLayout>
     );
