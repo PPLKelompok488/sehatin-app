@@ -14,7 +14,7 @@ interface PageHeaderProps {
 
 export function PageHeader({ title, subtitle, button }: PageHeaderProps) {
     return (
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-outline-variant/30 mb-10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 mb-10">
             <div className="space-y-2">
                 <h1 className="text-4xl font-extrabold text-on-surface tracking-tight">{title}</h1>
                 {subtitle && (
@@ -25,7 +25,7 @@ export function PageHeader({ title, subtitle, button }: PageHeaderProps) {
             </div>
             {button?.show !== false && button?.label && (
                 <Button 
-                    className="h-14 px-8 rounded-2xl shadow-lg shadow-primary/20 gap-3 text-base font-bold transition-all hover:scale-105 active:scale-95"
+                    className="h-14 px-8 rounded-lg gap-3 text-base font-bold transition-all hover:scale-105 active:scale-95"
                     onClick={button.onClick}
                 >
                     <PlusCircle className="size-6" />

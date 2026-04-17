@@ -30,17 +30,17 @@ export default function AppLayout({ children }: AppLayoutProps) {
         const role = user.role as 'admin' | 'doctor' | 'patient';
         const items = {
             patient: [
-                { title: 'Kunjungan', url: '/kunjungan', icon: Activity },
-                { title: 'Buat Kunjungan', url: '/kunjungan/create', icon: PlusCircle },
+                { title: 'Kunjungan', url: '/patient/kunjungan', icon: Activity },
+                { title: 'Buat Kunjungan', url: '/patient/buat-kunjungan', icon: PlusCircle },
             ],
             doctor: [
-                { title: 'Jadwal Saya', url: '/jadwal', icon: Calendar },
+                { title: 'Jadwal Saya', url: '/doctor/schedule', icon: Calendar },
             ],
             admin: [
-                { title: 'Dashboard', url: '/admin-dashboard', icon: LayoutDashboard },
-                { title: 'Poli', url: '/poli', icon: Activity },
-                { title: 'Dokter', url: '/dokter', icon: Stethoscope },
-                { title: 'Jadwal', url: '/jadwal-admin', icon: Calendar },
+                { title: 'Dashboard', url: '/admin/dashboard', icon: LayoutDashboard },
+                { title: 'Poli', url: '/admin/polis', icon: Activity },
+                { title: 'Dokter', url: '/admin/doctors', icon: Stethoscope },
+                { title: 'Jadwal', url: '/admin/schedules', icon: Calendar },
             ],
         };
         return items[role] || [];

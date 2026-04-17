@@ -4,7 +4,6 @@
 @plugin 'tailwindcss-animate';
 
 @layer base {
-    /* Override rdp selected color to Sehatin Primary Blue */
     .rdp-day_selected, 
     .rdp-day_selected:hover,
     .rdp-day[aria-selected="true"],
@@ -73,6 +72,19 @@
     --radius-sm: calc(var(--radius) - 4px);
     --radius-xl: 1rem;
     --radius-2xl: 1.5rem;
+
+    /* Accordion Animations */
+    @keyframes accordion-down {
+        from { height: 0; }
+        to { height: var(--radix-accordion-content-height); }
+    }
+    @keyframes accordion-up {
+        from { height: var(--radix-accordion-content-height); }
+        to { height: 0; }
+    }
+
+    --animate-accordion-down: accordion-down 0.2s ease-out;
+    --animate-accordion-up: accordion-up 0.2s ease-out;
 }
 
 :root {
