@@ -54,11 +54,11 @@ export default function Schedules({ schedules, doctors }: Props) {
 
     return (
         <AppLayout>
-            <Head title="Manajemen Jadwal Dr." />
+            <Head title="Manajemen Jadwal Dokter" />
 
             <PageHeader
-                title="Manajemen Jadwal Dr."
-                subtitle="Kelola jadwal praktik dokter. Atur ketersediaan dan jam layanan untuk memastikan pasien mendapatkan perawatan tepat waktu."
+                title="Manajemen Jadwal Dokter"
+                subtitle="Kelola jadwal praktik dokter. Atur jam operasional klinik dan rotasi praktek dokter."
                 button={{
                     label: 'Tambah Jadwal',
                     onClick: () => setAddOpen(true),

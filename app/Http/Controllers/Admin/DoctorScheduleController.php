@@ -146,11 +146,11 @@ class DoctorScheduleController extends Controller
         }
 
         $existingRecords = DoctorSchedule::where([
-            'day_of_week' => $validated['old_day_of_week'],
-            'start_time' => $validated['old_start_time'],
-            'end_time' => $validated['old_end_time'],
-            'slot_duration' => $validated['old_slot_duration'],
-        ])->get();
+                'day_of_week' => $validated['old_day_of_week'],
+                'start_time' => $validated['old_start_time'],
+                'end_time' => $validated['old_end_time'],
+                'slot_duration' => $validated['old_slot_duration'],
+            ])->get();
 
         $existingDoctorIds = $existingRecords->pluck('doctor_id')->toArray();
         $targetDoctorIds = array_map('intval', $validated['doctor_ids']);
@@ -159,11 +159,11 @@ class DoctorScheduleController extends Controller
             $toRemove = array_diff($existingDoctorIds, $targetDoctorIds);
             if (!empty($toRemove)) {
                 DoctorSchedule::where([
-                    'day_of_week' => $validated['old_day_of_week'],
-                    'start_time' => $validated['old_start_time'],
-                    'end_time' => $validated['old_end_time'],
-                    'slot_duration' => $validated['old_slot_duration'],
-                ])->whereIn('doctor_id', $toRemove)->delete();
+                        'day_of_week' => $validated['old_day_of_week'],
+                        'start_time' => $validated['old_start_time'],
+                        'end_time' => $validated['old_end_time'],
+                        'slot_duration' => $validated['old_slot_duration'],
+                    ])->whereIn('doctor_id', $toRemove)->delete();
             }
 
             $toAdd = array_diff($targetDoctorIds, $existingDoctorIds);
@@ -181,22 +181,42 @@ class DoctorScheduleController extends Controller
             $common = array_intersect($existingDoctorIds, $targetDoctorIds);
             if (!empty($common)) {
                 DoctorSchedule::where([
-                    'day_of_week' => $validated['old_day_of_week'],
-                    'start_time' => $validated['old_start_time'],
-                    'end_time' => $validated['old_end_time'],
-                    'slot_duration' => $validated['old_slot_duration'],
-                ])->whereIn('doctor_id', $common)->update([
-                    'day_of_week' => $validated['day_of_week'],
-                    'start_time' => $validated['start_time'],
-                    'end_time' => $validated['end_time'],
-                    'slot_duration' => $validated['slot_duration'],
-                    'is_active' => $validated['is_active'],
-                ]);
+                        'day_of_week' => $validated['old_day_of_week'],
+                        'start_time' => $validated['old_start_time'],
+                        'end_time' => $validated['old_end_time'],
+                        'slot_duration' => $validated['old_slot_duration'],
+                    ])->whereIn('doctor_id', $common)->update([
+                        'day_of_week' => $validated['day_of_week'],
+                        'start_time' => $validated['start_time'],
+                        'end_time' => $validated['end_time'],
+                        'slot_duration' => $validated['slot_duration'],
+                        'is_active' => $validated['is_active'],
+                    ]);
             }
 
             return redirect()->back()->with('success', 'Jadwal dokter berhasil diperbarui.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal memperbarui jadwal dokter. Silakan coba lagi.');
+        }
+    }
+
+    /**
+     * Soft delete all doctors in same session.
+     */
+    public function destroy(int $id): RedirectResponse
+    {
+        try {
+            $schedule = DoctorSchedule::findOrFail($id);
+            DoctorSchedule::where([
+                'day_of_week' => $schedule->day_of_week,
+                'start_time' => $schedule->start_time,
+                'end_time' => $schedule->end_time,
+                'slot_duration' => $schedule->slot_duration,
+            ])->delete();
+
+            return redirect()->back()->with('success', 'Sesi berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal menghapus sesi. Silakan coba lagi.');
         }
     }
 

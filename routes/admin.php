@@ -12,9 +12,10 @@ Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(functi
         ->name('schedules');
     Route::post('schedules', [\App\Http\Controllers\Admin\DoctorScheduleController::class, 'store'])
         ->name('schedules.store');
-        
     Route::put('schedules/{id}', [\App\Http\Controllers\Admin\DoctorScheduleController::class, 'update'])
         ->name('schedules.update');
+    Route::delete('schedules/{id}', [\App\Http\Controllers\Admin\DoctorScheduleController::class, 'destroy'])
+        ->name('schedules.destroy');
 
     Route::get('polis', fn() => Inertia::render('admin/polis/pages/polis'))
         ->name('polis');

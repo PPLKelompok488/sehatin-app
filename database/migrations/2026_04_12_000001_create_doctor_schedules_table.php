@@ -19,6 +19,7 @@ return new class extends Migration
             $table->time('end_time');
             $table->integer('slot_duration')->default(15);
             $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

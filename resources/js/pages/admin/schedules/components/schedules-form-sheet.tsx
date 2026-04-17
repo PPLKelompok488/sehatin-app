@@ -14,8 +14,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Calendar, Clock, Plus, Timer, Trash2, X } from 'lucide-react';
 import * as React from 'react';
-import { useForm } from '@inertiajs/react';
-import { SchedulesFormData, validateSchedule } from '../schema/schedules.schema';
+import { SchedulesFormData } from '../schema/schedules.schema';
 import { cn } from '@/lib/utils';
 
 interface Doctor {
