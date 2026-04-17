@@ -233,7 +233,18 @@ export function SchedulesFormSheet({
                             </SelectTrigger>
                             <SelectContent>
                                 {doctors.filter(d => !data.doctor_ids.some(id => Number(id) === Number(d.id))).map((doc) => (
-                                    <SelectItem hideIndicator key={doc.id} value={doc.id.toString()}>{doc.name}</SelectItem>
+                                    <SelectItem hideIndicator key={doc.id} value={doc.id.toString()}>
+                                        <div className="flex items-center gap-2">
+                                            <Avatar className="size-11 rounded-lg">
+                                                <AvatarImage src={doc.avatar_url} />
+                                                <AvatarFallback className="bg-primary/5 text-primary font-bold">{doc.name.charAt(0)}</AvatarFallback>
+                                            </Avatar>
+                                            <div className="flex flex-col">
+                                                <span className="text-sm font-bold text-on-surface">Dr. {doc.name}</span>
+                                                <span className="text-xs text-on-surface-variant">{doc.specialization}</span>
+                                            </div>
+                                        </div>
+                                    </SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
