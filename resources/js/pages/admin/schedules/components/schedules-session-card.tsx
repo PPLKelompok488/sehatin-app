@@ -1,4 +1,5 @@
 import { Edit, User } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export interface SchedulesSession {
     id: number;
@@ -31,9 +32,12 @@ export function SchedulesSessionCard({ session, onClick }: SchedulesSessionCardP
         <button
             type="button"
             onClick={onClick}
-            className="group w-full flex items-center justify-between gap-4 rounded-lg bg-primary/[0.06] px-6 py-5 text-left transition-all active:scale-[0.995] cursor-pointer"
+            className={cn(
+                "group w-full flex items-center justify-between gap-4 rounded-lg px-6 py-5 text-left transition-all active:scale-[0.995] cursor-pointer",
+                session.is_active ? "bg-primary/[0.06]" : "bg-on-surface-variant/3"
+            )}
         >
-            <div className="flex flex-1 items-center min-w-0 flex-wrap sm:flex-nowrap">
+            <div className={cn("flex flex-1 items-center min-w-0 flex-wrap sm:flex-nowrap", session.is_active ? "" : "opacity-50")}>
                 <div className="flex-1 min-w-[150px] pr-6">
                     <div className="text-xs font-semibold text-on-surface-variant/60 mb-1.5 capitalize">
                         Waktu Praktek
@@ -107,8 +111,8 @@ export function SchedulesSessionCard({ session, onClick }: SchedulesSessionCardP
                     </div>
                 </div>
             </div>
-            <div className="ml-4 shrink-0 transition-transform group-hover:scale-110">
-                <Edit className="size-5 text-on-surface-variant/40 group-hover:text-primary transition-colors" />
+            <div className="ml-4 shrink-0">
+                <Edit className="size-5 text-primary group-hover:opacity-60 transition-opacity" />
             </div>
         </button>
     );

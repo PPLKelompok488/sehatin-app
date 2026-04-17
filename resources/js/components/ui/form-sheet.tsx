@@ -1,5 +1,5 @@
 import * as React from "react"
-import { LucideIcon} from "lucide-react"
+import { LucideIcon } from "lucide-react"
 import {
     Sheet,
     SheetContent,
@@ -15,7 +15,7 @@ interface FormSheetProps extends React.ComponentProps<typeof Sheet> {
     icon?: LucideIcon
     children: React.ReactNode
     footer?: React.ReactNode
-    side?: "top" | "bottom" | "left" | "right"
+    side?: "top" | "bottom" | "left" | "right" | "center"
     className?: string
     contentClassName?: string
 }
@@ -26,18 +26,16 @@ export function FormSheet({
     icon: Icon,
     children,
     footer,
-    side = "right",
+    side = "center",
     className,
     contentClassName,
     ...props
 }: FormSheetProps) {
     return (
         <Sheet {...props}>
-            <SheetContent 
-                side={side} 
-                className={cn("p-0 sm:max-w-[540px] border-none overflow-hidden flex flex-col", className)}
-                onPointerDownOutside={(e) => e.preventDefault()}
-                onInteractOutside={(e) => e.preventDefault()}
+            <SheetContent
+                side={side}
+                className={cn("p-0 border-none overflow-hidden flex flex-col", className)}
             >
                 <div className="flex h-full flex-col">
                     <SheetHeader className="p-8 pb-4 space-y-4">

@@ -32,19 +32,30 @@ export function SchedulesFormSheetEdit({ open, onOpenChange, doctors, session }:
         old_slot_duration: session?.slot_duration,
     });
 
-    
+
     React.useEffect(() => {
-        if (open) {
-            reset();
+        if (open && session) {
+            setData({
+                day_of_week: session.day_of_week,
+                start_time: session.start_time,
+                end_time: session.end_time,
+                slot_duration: session.slot_duration,
+                is_active: session.is_active,
+                doctor_ids: session.doctors?.map(d => Number(d.id)) ?? [],
+                old_day_of_week: session.day_of_week,
+                old_start_time: session.start_time,
+                old_end_time: session.end_time,
+                old_slot_duration: session.slot_duration,
+            });
             clearErrors();
         }
-    }, [open, reset, clearErrors]);
+    }, [open, session, setData, clearErrors]);
 
     const isUnchanged = React.useMemo(() => {
         if (!session) return true;
 
         const normalizeTime = (t: string) => (t || '').slice(0, 5);
-        
+
         const currentDoctors = [...data.doctor_ids].map(Number).sort();
         const initialDoctors = (session.doctors?.map(d => d.id) ?? []).map(Number).sort();
 
