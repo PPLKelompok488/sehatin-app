@@ -97,6 +97,15 @@ export default function DoctorSelection({
         );
     };
 
+    const getInitials = (name: string) => {
+        return name
+            .split(' ')
+            .map((n) => n[0])
+            .slice(0, 2)
+            .join('')
+            .toUpperCase();
+    };
+
     return (
         <div className="space-y-6">
             <div className="flex items-center gap-2">
@@ -124,11 +133,13 @@ export default function DoctorSelection({
                                 <AccordionTrigger className="hover:no-underline [&>svg]:size-5 [&>svg]:text-on-surface-variant/40">
                                     <div className="flex items-center gap-5">
                                         <div className="relative">
-                                            <Avatar className="size-12 border border-border">
-                                                <AvatarImage src={doctor.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(doctor.user.name)}&background=random&color=fff&size=100`} />
-                                                <AvatarFallback>{doctor.user.name.charAt(0)}</AvatarFallback>
+                                            <Avatar className="size-10 transition-all hover:opacity-80 border-none ring-0">
+                                                <AvatarImage src={doctor.avatar_url || ''} alt={doctor.user.name} />
+                                                <AvatarFallback className="bg-primary/10 text-primary font-bold">
+                                                    {getInitials(doctor.user.name)}
+                                                </AvatarFallback>
                                             </Avatar>
-                                            <div className="absolute -bottom-0.5 -right-0.5 bg-green-500 w-3.5 h-3.5 rounded-full border-2 border-white shadow-sm"></div>
+                                            <div className="absolute -bottom-0.5 -right-0.5 bg-green-500 w-3.5 h-3.5 rounded-full border-3 border-white"></div>
                                         </div>
                                         <div className="flex flex-col text-left">
                                             <span className="font-bold text-lg text-on-surface">Dr. {doctor.user.name}</span>
