@@ -6,12 +6,12 @@ import { SharedData } from '@/types';
 import { getInitials } from '@/lib/utils';
 import { Link, usePage } from '@inertiajs/react';
 
-import { 
-    LayoutDashboard, 
-    Calendar, 
-    User, 
-    Stethoscope, 
-    Activity, 
+import {
+    LayoutDashboard,
+    Calendar,
+    User,
+    Stethoscope,
+    Activity,
     PlusCircle,
     LogOut,
 } from 'lucide-react';
@@ -49,7 +49,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
     return (
         <div className="min-h-screen bg-surface selection:bg-primary/10 selection:text-primary">
             <ToastHandler />
-            
+
             {/* Navigation Header */}
             <header className="sticky top-0 z-50 w-full bg-white border-b border-outline-variant/30 backdrop-blur-md">
                 <div className="w-full px-4 sm:px-8 lg:px-12">
@@ -68,11 +68,10 @@ export default function AppLayout({ children }: AppLayoutProps) {
                                         <Link
                                             key={item.url}
                                             href={item.url}
-                                            className={`relative flex items-center h-full px-2 sm:px-1 text-sm transition-all duration-300 gap-2 ${
-                                                isActive 
-                                                ? 'text-primary font-extrabold' 
+                                            className={`relative flex items-center h-full px-2 sm:px-1 text-sm transition-all duration-300 gap-2 ${isActive
+                                                ? 'text-primary font-extrabold'
                                                 : 'text-on-surface-variant hover:text-primary font-semibold'
-                                            }`}
+                                                }`}
                                         >
                                             <Icon className={`size-5 transition-transform ${isActive ? 'scale-110' : 'group-hover:scale-110'}`} />
                                             <span className="hidden sm:inline-block">{item.title}</span>
@@ -120,7 +119,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
                                             Profil Saya
                                         </DropdownMenuItem>
                                         <DropdownMenuSeparator className="my-2" />
-                                        <DropdownMenuItem 
+                                        <DropdownMenuItem
                                             asChild
                                             className="rounded-xl gap-3 py-3 font-bold text-red-500 focus:text-red-600 focus:bg-red-50 cursor-pointer transition-colors"
                                         >
@@ -132,13 +131,13 @@ export default function AppLayout({ children }: AppLayoutProps) {
                                     </DropdownMenuContent>
                                 </DropdownMenu>
 
-                                <Link 
-                                    href={route('logout')} 
+                                <Link
+                                    href={route('logout')}
                                     method="post"
                                     className="hidden p-2.5 text-on-surface-variant hover:text-red-500 hover:bg-red-50 rounded-xl transition-all md:flex items-center justify-center border border-transparent hover:border-red-100"
                                     title="Keluar"
                                 >
-                                    <LogOut className="size-5" />
+                                    keluar
                                 </Link>
                             </div>
                         </div>
