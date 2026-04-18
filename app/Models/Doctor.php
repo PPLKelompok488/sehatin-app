@@ -28,4 +28,9 @@ class Doctor extends Model
     {
         return $this->belongsTo(Poli::class);
     }
+
+    public function schedules(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(DoctorSchedule::class);
+    }
 }
