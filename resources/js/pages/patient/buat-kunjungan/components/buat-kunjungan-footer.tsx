@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Link } from '@inertiajs/react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface BuatKunjunganFooterProps {
     step: number;
@@ -27,12 +28,14 @@ export function BuatKunjunganFooter({ step, onNext, onPrevious, canNext }: BuatK
                     </p>
                 </div>
                 <div className="flex items-center gap-6 w-full md:w-auto">
-                    <Link 
-                        href="/patient/kunjungan"
-                        className="flex-1 md:flex-none text-center text-on-surface-variant font-bold text-sm hover:text-red-500 transition-colors"
-                    >
-                        Batal
-                    </Link>
+                    {step === 1 && (
+                        <Link 
+                            href="/patient/kunjungan"
+                            className="flex-1 md:flex-none text-center text-on-surface-variant font-bold text-sm hover:text-red-500 transition-colors"
+                        >
+                            Batal
+                        </Link>
+                    )}
                     
                     <div className="flex gap-4 flex-1 md:flex-none">
                         {step > 1 && (
@@ -41,6 +44,7 @@ export function BuatKunjunganFooter({ step, onNext, onPrevious, canNext }: BuatK
                                 onClick={onPrevious}
                                 className="px-8 py-7 rounded-2xl font-bold bg-surface-container/50 hover:bg-surface-container"
                             >
+                                <ChevronLeft className="size-5 mr-1" />
                                 Kembali
                             </Button>
                         )}
@@ -50,6 +54,7 @@ export function BuatKunjunganFooter({ step, onNext, onPrevious, canNext }: BuatK
                             className="flex-1 md:flex-none px-12 py-7 rounded-2xl bg-primary text-on-primary font-bold text-lg shadow-lg shadow-primary/20 hover:translate-y-[-2px] active:translate-y-0 transition-all duration-300"
                         >
                             {currentConfig.nextLabel}
+                            <ChevronRight className="size-5 ml-1" />
                         </Button>
                     </div>
                 </div>
