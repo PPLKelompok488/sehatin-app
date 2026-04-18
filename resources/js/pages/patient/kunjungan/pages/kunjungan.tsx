@@ -11,8 +11,9 @@ export default function Kunjungan() {
                 title="Kunjungan Anda"
                 subtitle="Pantau jadwal konsultasi aktif dan tinjau kembali catatan medis dari kunjungan sebelumnya."
                 button={{
-                    label: "Tambah Kunjungan",
-                    show: true
+                    label: "Buat Kunjungan",
+                    show: true,
+                    href: route('patient.buat-kunjungan')
                 }}
             />
 

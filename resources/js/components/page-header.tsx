@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { Link } from '@inertiajs/react';
 import { PlusCircle } from 'lucide-react';
 
 interface PageHeaderProps {
@@ -23,13 +24,23 @@ export function PageHeader({ title, subtitle, button }: PageHeaderProps) {
                     </p>
                 )}
             </div>
-            {button?.show !== false && button?.label && (
+            {button && button.show !== false && button.label && (
                 <Button 
                     className="h-14 px-8 rounded-lg gap-3 text-base font-bold transition-all hover:scale-105 active:scale-95"
                     onClick={button.onClick}
+                    asChild={!!button.href}
                 >
-                    <PlusCircle className="size-6" />
-                    {button.label}
+                    {button.href ? (
+                        <Link href={button.href}>
+                            <PlusCircle className="size-6" />
+                            {button.label}
+                        </Link>
+                    ) : (
+                        <>
+                            <PlusCircle className="size-6" />
+                            {button.label}
+                        </>
+                    )}
                 </Button>
             )}
         </div>

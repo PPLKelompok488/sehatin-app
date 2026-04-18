@@ -1,13 +1,15 @@
 <?php
 
+use App\Http\Controllers\Patient\AppointmentController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 Route::middleware(['role:patient'])->prefix('patient')->name('patient.')->group(function () {
 
-    Route::get('kunjungan', fn() => Inertia::render('patient/kunjungan/pages/kunjungan'))
+    Route::get('kunjungan', [AppointmentController::class, 'index'])
         ->name('kunjungan');
 
-    Route::get('buat-kunjungan', fn() => Inertia::render('patient/buat-kunjungan/pages/buat-kunjungan'))
-    ->name('buat-kunjungan');
+    Route::get('buat-kunjungan', [AppointmentController::class, 'create'])
+        ->name('buat-kunjungan');
+    Route::post('buat-kunjungan', [AppointmentController::class, 'store'])
+        ->name('buat-kunjungan.store');
 });

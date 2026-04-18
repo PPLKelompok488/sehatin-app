@@ -88,14 +88,14 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                     </label>
                                     <div className="relative group">
                                         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                            <span className="material-symbols-outlined text-xl text-on-surface-variant group-focus-within:text-primary transition-colors">mail</span>
+                                            <span className="material-symbols-outlined text-xl text-on-surface-variant/60 group-focus-within:text-primary transition-colors">mail</span>
                                         </div>
                                         <input
                                             id="email"
                                             type="email"
                                             name="email"
                                             value={data.email}
-                                            className="block w-full pl-11 pr-4 py-3.5 bg-surface-container border-none rounded-xl focus:ring-2 focus:ring-primary/20 focus:bg-surface text-on-surface placeholder:text-on-surface-variant/50 transition-all duration-200"
+                                            className="block w-full pl-11 pr-4 py-3.5 bg-surface-container border-none rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:bg-surface text-on-surface placeholder:text-on-surface-variant/50 transition-all duration-200"
                                             placeholder="nama@contoh.com"
                                             onChange={(e) => setData('email', e.target.value)}
                                             autoComplete="email"
@@ -123,14 +123,14 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                     </div>
                                     <div className="relative group">
                                         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                            <span className="material-symbols-outlined text-xl text-on-surface-variant group-focus-within:text-primary transition-colors">lock</span>
+                                            <span className="material-symbols-outlined text-xl text-on-surface-variant/60 group-focus-within:text-primary transition-colors">lock</span>
                                         </div>
                                         <input
                                             id="password"
                                             type={showPassword ? 'text' : 'password'}
                                             name="password"
                                             value={data.password}
-                                            className="block w-full pl-11 pr-12 py-3.5 bg-surface-container border-none rounded-xl focus:ring-2 focus:ring-primary/20 focus:bg-surface text-on-surface placeholder:text-on-surface-variant/50 transition-all duration-200"
+                                            className="block w-full pl-11 pr-12 py-3.5 bg-surface-container border-none rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:bg-surface text-on-surface placeholder:text-on-surface-variant/50 transition-all duration-200"
                                             placeholder="••••••••"
                                             onChange={(e) => setData('password', e.target.value)}
                                             autoComplete="current-password"
@@ -139,7 +139,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                         <button
                                             type="button"
                                             onClick={() => setShowPassword(!showPassword)}
-                                            className="absolute inset-y-0 right-0 pr-4 flex items-center text-on-surface-variant hover:text-primary transition-colors"
+                                            className="absolute inset-y-0 right-0 pr-4 flex items-center text-on-surface-variant/60 text-primary cursor-pointer transition-colors"
                                             tabIndex={-1}
                                         >
                                             <span className="material-symbols-outlined text-xl">
