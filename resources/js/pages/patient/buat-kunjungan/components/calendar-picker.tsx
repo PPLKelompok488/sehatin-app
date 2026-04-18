@@ -6,12 +6,14 @@ interface CalendarPickerProps {
     selectedDate: Date | null;
     onDateSelect: (date: Date) => void;
     onResetSelection: () => void;
+    availableDays: string[];
 }
 
 export default function CalendarPicker({
     selectedDate,
     onDateSelect,
     onResetSelection,
+    availableDays,
 }: CalendarPickerProps) {
     const scrollRef = React.useRef<HTMLDivElement>(null);
     const [isDragging, setIsDragging] = React.useState(false);
@@ -57,6 +59,11 @@ export default function CalendarPicker({
         }
         return result;
     }, []);
+
+    const indonesianDay = (date: Date) => {
+        const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+        return days[date.getDay()];
+    };
 
     const shortDay = (date: Date) => {
         const days = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
@@ -105,10 +112,12 @@ export default function CalendarPicker({
                     const isSelected = selectedDate?.toDateString() === date.toDateString();
                     const isToday = new Date().toDateString() === date.toDateString();
                     const isTomorrow = new Date(new Date().setDate(new Date().getDate() + 1)).toDateString() === date.toDateString();
+                    const isAvailable = availableDays.includes(indonesianDay(date));
 
                     return (
                         <button
                             key={idx}
+                            disabled={!isAvailable}
                             onClick={() => {
                                 onDateSelect(date);
                                 onResetSelection();
@@ -117,7 +126,8 @@ export default function CalendarPicker({
                                 "flex-shrink-0 w-20 h-24 cursor-pointer rounded-lg rounded-r-2xl flex flex-col items-center justify-center transition-all duration-100 border",
                                 isSelected 
                                     ? "bg-primary border-primary text-on-primary" 
-                                    : "bg-white border-border hover:border-primary/60 text-on-surface"
+                                    : "bg-white border-border hover:border-primary/60 text-on-surface",
+                                !isAvailable && "bg-muted opacity-50 border-muted/50 hover:border-muted cursor-not-allowed grayscale-[1]"
                             )}
                         >
                             <span className={cn(

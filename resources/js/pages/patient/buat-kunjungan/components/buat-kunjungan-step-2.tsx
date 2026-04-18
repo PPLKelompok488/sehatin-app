@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils';
 import { Check, Clock, CalendarDays } from 'lucide-react';
+import * as React from 'react';
 import CalendarPicker from './calendar-picker';
 
 interface Schedule {
@@ -54,6 +55,16 @@ export default function BuatKunjunganStep2({
 
     const selectedDayName = selectedDate ? indonesianDay(selectedDate) : null;
 
+    const availableDays = React.useMemo(() => {
+        const days = new Set<string>();
+        doctors.forEach(doctor => {
+            doctor.schedules.forEach(schedule => {
+                days.add(schedule.day_of_week);
+            });
+        });
+        return Array.from(days);
+    }, [doctors]);
+
     const getTimeSlots = (schedule: Schedule) => {
         const slots = [];
         const [startHours, startMinutes] = schedule.start_time.split(':').map(Number);
@@ -96,6 +107,7 @@ export default function BuatKunjunganStep2({
             {/* Date Picker Component */}
             <CalendarPicker 
                 selectedDate={selectedDate}
+                availableDays={availableDays}
                 onDateSelect={onDateSelect}
                 onResetSelection={() => {
                     onDoctorSelect(-1);
@@ -190,33 +202,18 @@ export default function BuatKunjunganStep2({
                                             </div>
                                         </div>
                                     </div>
-                                );
+                        );
                             });
                         })}
-
-                        {/* Empty State for selected Day */}
-                        {doctors.filter(d => d.schedules.some(s => s.day_of_week === selectedDayName)).length === 0 && (
-                            <div className="py-24 text-center space-y-6 bg-surface-container/30 rounded-[3rem] border-2 border-dashed border-outline-variant/30 px-6">
-                                <div className="w-20 h-20 bg-white rounded-3xl flex items-center justify-center mx-auto shadow-xl">
-                                    <CalendarDays className="size-10 text-on-surface-variant/20" />
-                                </div>
-                                <div className="space-y-2">
-                                    <p className="text-on-surface text-xl font-black">Tidak Ada Jadwal Praktek</p>
-                                    <p className="text-sm text-on-surface-variant max-w-xs mx-auto leading-relaxed">
-                                        Maaf, tidak ada dokter yang tersedia untuk poliklinik ini pada hari {selectedDayName}. Silakan pilih tanggal lain.
-                                    </p>
-                                </div>
-                            </div>
-                        )}
                     </div>
                 </div>
             )}
 
             {/* Hint Initial State */}
             {!selectedDate && (
-                <div className="py-20 text-center space-y-4 bg-primary/5 rounded-[3rem] border-2 border-dashed border-primary/10">
-                    <CalendarDays className="size-12 text-primary/20 mx-auto" />
-                    <p className="font-bold text-on-surface-variant">Pilih tanggal terlebih dahulu untuk melihat ketersediaan dokter</p>
+                <div className="py-20 text-center space-y-4 rounded-[3rem] border-2 border-dashed border-border">
+                    <CalendarDays className="size-12 text-border mx-auto" />
+                    <p className="font-regular text-on-surface-variant/50">Pilih tanggal terlebih dahulu untuk melihat ketersediaan dokter</p>
                 </div>
             )}
         </div>
