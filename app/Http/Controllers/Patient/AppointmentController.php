@@ -19,7 +19,51 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        return Inertia::render('patient/kunjungan/pages/kunjungan');
+        $patient = Auth::user()->patient;
+
+        $appointments = collect();
+        $closestAppointment = null;
+        $totalKunjungan = 0;
+
+        if ($patient) {
+            $appointmentsRaw = \App\Models\Appointment::with(['doctor.user', 'poli'])
+                ->where('patient_id', $patient->id)
+                ->orderBy('appointment_date', 'asc')
+                ->orderBy('start_time', 'asc')
+                ->get();
+            
+            $totalKunjungan = $appointmentsRaw->count();
+            
+            $closestAppointmentRaw = $appointmentsRaw->where('status', 'booked')->first();
+            
+            if ($closestAppointmentRaw) {
+                $dateObj = \Carbon\Carbon::parse($closestAppointmentRaw->appointment_date);
+                $closestAppointment = [
+                    'date' => $dateObj->translatedFormat('d F Y'),
+                    'time' => \Carbon\Carbon::parse($closestAppointmentRaw->start_time)->format('H:i') . ' WIB',
+                    'doctor_name' => $closestAppointmentRaw->doctor->user->name ?? 'Dokter',
+                ];
+            }
+
+            $appointments = $appointmentsRaw->map(function ($app) {
+                $dateObj = \Carbon\Carbon::parse($app->appointment_date);
+                return [
+                    'id' => $app->id,
+                    'doctor_name' => $app->doctor->user->name ?? 'Dokter',
+                    'poli_name' => $app->poli->name ?? 'Umum',
+                    'raw_date' => $dateObj->format('Y-m-d'),
+                    'date_time' => $dateObj->translatedFormat('d M') . ', ' . \Carbon\Carbon::parse($app->start_time)->format('H:i'),
+                    'queue_number' => $app->queue_number,
+                    'status' => $app->status,
+                ];
+            });
+        }
+
+        return Inertia::render('patient/kunjungan/pages/kunjungan', [
+            'appointments' => $appointments,
+            'closestAppointment' => $closestAppointment,
+            'totalKunjungan' => $totalKunjungan,
+        ]);
     }
 
     /**
