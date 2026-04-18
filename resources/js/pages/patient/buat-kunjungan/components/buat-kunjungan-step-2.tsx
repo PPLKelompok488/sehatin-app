@@ -1,4 +1,4 @@
-import { CalendarDays } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import * as React from 'react';
 import CalendarPicker from './calendar-picker';
 import DoctorSelection from './doctor-selection';
@@ -76,7 +76,7 @@ export default function BuatKunjunganStep2({
             </div>
 
             {/* Date Picker Component */}
-            <CalendarPicker 
+            <CalendarPicker
                 selectedDate={selectedDate}
                 availableDays={availableDays}
                 onDateSelect={onDateSelect}
@@ -88,7 +88,8 @@ export default function BuatKunjunganStep2({
 
             {/* Doctor Selection Component */}
             {selectedDate && (
-                <DoctorSelection 
+                <DoctorSelection
+                    key={selectedDate.toISOString().split('T')[0]}
                     doctors={doctors}
                     selectedDate={selectedDate}
                     selectedDayName={selectedDayName}
@@ -100,11 +101,12 @@ export default function BuatKunjunganStep2({
                 />
             )}
 
-            {/* Hint Initial State */}
             {!selectedDate && (
-                <div className="py-20 text-center space-y-4 rounded-[3rem] border-2 border-dashed border-border">
-                    <CalendarDays className="size-12 text-border mx-auto" />
-                    <p className="font-regular text-on-surface-variant/50">Pilih tanggal terlebih dahulu untuk melihat ketersediaan dokter</p>
+                <div className="flex justify-center">
+                    <div className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary rounded-full text-on-primary text-sm font-medium">
+                        <AlertCircle className="size-4" />
+                        <span>Pastikan kamu memilih tanggal terlebih dahulu</span>
+                    </div>
                 </div>
             )}
         </div>

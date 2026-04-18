@@ -1,5 +1,14 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { CalendarDays, CheckCircle2, Clock, CreditCard, Info, MapPin } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
+import { CalendarDays, CheckCircle2, CreditCard, Info, MapPin } from 'lucide-react';
 
 interface Doctor {
     id: number;
@@ -21,6 +30,10 @@ interface BuatKunjunganStep3Props {
     selectedDoctor: Doctor | null;
     selectedDate: Date | null;
     selectedTime: string | null;
+    confirmDialogOpen: boolean;
+    onConfirmDialogOpenChange: (open: boolean) => void;
+    onConfirm: () => void;
+    isSubmitting: boolean;
 }
 
 export default function BuatKunjunganStep3({
@@ -29,6 +42,10 @@ export default function BuatKunjunganStep3({
     selectedDoctor,
     selectedDate,
     selectedTime,
+    confirmDialogOpen,
+    onConfirmDialogOpenChange,
+    onConfirm,
+    isSubmitting,
 }: BuatKunjunganStep3Props) {
     const getInitials = (name: string) => {
         return name
@@ -172,7 +189,7 @@ export default function BuatKunjunganStep3({
                         <div>
                             <p className="text-xs text-on-surface-variant">Pembayaran</p>
                             <p className="text-sm font-bold text-on-surface">
-                                Kasir Klinik (Offline)
+                                Kasir
                             </p>
                         </div>
                     </div>
@@ -212,6 +229,35 @@ export default function BuatKunjunganStep3({
                     </div>
                 </aside>
             </div>
+
+            {/* Confirmation Dialog */}
+            <Dialog open={confirmDialogOpen} onOpenChange={onConfirmDialogOpenChange}>
+                <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                        <DialogTitle>Konfirmasi Booking</DialogTitle>
+                        <DialogDescription>
+                            Apakah Anda yakin ingin membuat kunjungan ini?
+                        </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter className="gap-2 sm:gap-0">
+                        <Button
+                            type="button"
+                            variant="secondary"
+                            onClick={() => onConfirmDialogOpenChange(false)}
+                            disabled={isSubmitting}
+                        >
+                            Batal
+                        </Button>
+                        <Button
+                            type="button"
+                            onClick={onConfirm}
+                            disabled={isSubmitting}
+                        >
+                            {isSubmitting ? 'Membuat...' : 'Ya, Buat'}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }

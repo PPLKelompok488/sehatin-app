@@ -52,6 +52,9 @@ export default function BuatKunjungan({ polis, doctors, bookedSlots }: BuatKunju
     const [selectedDoctorId, setSelectedDoctorId] = React.useState<number | null>(null);
     const [selectedDate, setSelectedDate] = React.useState<Date | null>(null);
     const [selectedTime, setSelectedTime] = React.useState<string | null>(null);
+    const [confirmDialogOpen, setConfirmDialogOpen] = React.useState(false);
+
+    const [isSubmitting, setIsSubmitting] = React.useState(false);
 
     const nextStep = () => {
         if (step === 1 && selectedPoli) {
@@ -64,9 +67,33 @@ export default function BuatKunjungan({ polis, doctors, bookedSlots }: BuatKunju
                     onSuccess: () => setStep(2)
                 }
             );
-        } else if (step < 3) {
+        } else if (step === 2) {
             setStep(step + 1);
+        } else if (step === 3) {
+            setConfirmDialogOpen(true);
         }
+    };
+
+    const handleConfirmAppointment = () => {
+        if (!selectedPoli || !selectedDoctorId || !selectedDate || !selectedTime) return;
+
+        setIsSubmitting(true);
+        const formattedDate = selectedDate.toISOString().split('T')[0];
+
+        router.post(route('patient.buat-kunjungan.store'), {
+            poli_id: selectedPoli,
+            doctor_id: selectedDoctorId.toString(),
+            appointment_date: formattedDate,
+            start_time: selectedTime,
+        }, {
+            onSuccess: () => {
+                setConfirmDialogOpen(false);
+                setIsSubmitting(false);
+            },
+            onError: () => {
+                setIsSubmitting(false);
+            },
+        });
     };
 
     const prevStep = () => {
@@ -109,6 +136,10 @@ export default function BuatKunjungan({ polis, doctors, bookedSlots }: BuatKunju
                                 selectedDoctor={doctors.find(d => d.id === selectedDoctorId) || null}
                                 selectedDate={selectedDate}
                                 selectedTime={selectedTime}
+                                confirmDialogOpen={confirmDialogOpen}
+                                onConfirmDialogOpenChange={setConfirmDialogOpen}
+                                onConfirm={handleConfirmAppointment}
+                                isSubmitting={isSubmitting}
                             />
                         )}
                     </div>

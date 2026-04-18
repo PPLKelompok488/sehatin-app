@@ -10,4 +10,6 @@ Route::middleware(['role:patient'])->prefix('patient')->name('patient.')->group(
 
     Route::get('buat-kunjungan', [AppointmentController::class, 'create'])
         ->name('buat-kunjungan');
+    Route::post('buat-kunjungan', [AppointmentController::class, 'store'])
+        ->name('buat-kunjungan.store');
 });

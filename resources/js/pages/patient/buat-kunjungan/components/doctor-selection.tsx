@@ -6,7 +6,7 @@ import {
 } from '@/components/ui/accordion';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
-import { Clock } from 'lucide-react';
+import { Clock, Timer } from 'lucide-react';
 import * as React from 'react';
 
 interface Schedule {
@@ -71,18 +71,18 @@ export default function DoctorSelection({
         const slots = [];
         const [startHours, startMinutes] = schedule.start_time.split(':').map(Number);
         const [endHours, endMinutes] = schedule.end_time.split(':').map(Number);
-        
+
         let current = new Date();
         current.setHours(startHours, startMinutes, 0, 0);
-        
+
         const stop = new Date();
         stop.setHours(endHours, endMinutes, 0, 0);
-        
+
         while (current < stop) {
-            slots.push(current.toLocaleTimeString('id-ID', { 
-                hour: '2-digit', 
+            slots.push(current.toLocaleTimeString('id-ID', {
+                hour: '2-digit',
                 minute: '2-digit',
-                hour12: false 
+                hour12: false
             }).replace('.', ':'));
             current = new Date(current.getTime() + schedule.slot_duration * 60000);
         }
@@ -107,11 +107,11 @@ export default function DoctorSelection({
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
             <div className="flex items-center gap-2">
                 <h3 className="text-sm font-semibold text-on-surface-variant">Dokter Tersedia</h3>
             </div>
-            
+
             <Accordion type="multiple" defaultValue={allActiveScheduleIds} className="w-full space-y-4">
                 {doctors.map((doctor) => {
                     const activeSchedules = doctor.schedules.filter(s => s.day_of_week === selectedDayName);
@@ -120,13 +120,13 @@ export default function DoctorSelection({
                         const slots = getTimeSlots(schedule);
 
                         return (
-                            <AccordionItem 
-                                key={itemId} 
+                            <AccordionItem
+                                key={itemId}
                                 value={itemId}
                                 className={cn(
                                     "border transition-all duration-300",
                                     selectedDoctorId === doctor.id && selectedTime && slots.includes(selectedTime)
-                                        ? "border-primary shadow-lg shadow-primary/5" 
+                                        ? "border-primary shadow-lg shadow-primary/5"
                                         : "border-border hover:border-border/80"
                                 )}
                             >
@@ -148,7 +148,7 @@ export default function DoctorSelection({
                                                 <span className="w-1 h-1 rounded-full bg-border"></span>
                                                 <div className="flex items-center gap-1.5 bg-primary px-3 py-1 rounded-full text-white text-[10px]">
                                                     <Clock className="size-3" />
-                                                    <span>{schedule.start_time.substring(0,5)} - {schedule.end_time.substring(0,5)}</span>
+                                                    <span>{schedule.start_time.substring(0, 5)} - {schedule.end_time.substring(0, 5)}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -157,13 +157,16 @@ export default function DoctorSelection({
                                 <AccordionContent>
                                     <div className="space-y-5">
                                         <div className="flex items-center justify-between">
-                                            <p className="text-xs font-medium text-on-surface-variant/60">Waktu konsultasi ({schedule.slot_duration} menit)</p>
+                                            <p className="text-xs font-medium text-on-surface-variant/60 flex items-center gap-1.5">
+                                                <Timer className="size-3.5" />
+                                                Waktu konsultasi ({schedule.slot_duration} menit)
+                                            </p>
                                         </div>
-                                        <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2">
+                                        <div className="grid grid-cols-3 xs:grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 gap-2">
                                             {slots.map((slot) => {
                                                 const isSelectedTime = selectedTime === slot && selectedDoctorId === doctor.id;
                                                 const isBooked = isSlotBooked(doctor.id, selectedDate, slot);
-                                                
+
                                                 return (
                                                     <button
                                                         key={slot}
@@ -181,12 +184,12 @@ export default function DoctorSelection({
                                                             "py-2.5 px-2 rounded-lg text-sm font-bold border cursor-pointer",
                                                             isSelectedTime
                                                                 ? "bg-primary border-primary text-on-primary"
-                                                                : isBooked 
-                                                                    ? "bg-muted opacity-50 border-muted/50 hover:border-muted cursor-not-allowed grayscale-[1] font-normal italic"
+                                                                : isBooked
+                                                                    ? "bg-muted opacity-50 border-muted/50 hover:border-muted cursor-not-allowed grayscale-[1]"
                                                                     : "bg-white border-border text-on-surface hover:border-primary/40"
                                                         )}
                                                     >
-                                                        {isBooked ? "penuh" : slot}
+                                                        {slot}
                                                     </button>
                                                 );
                                             })}

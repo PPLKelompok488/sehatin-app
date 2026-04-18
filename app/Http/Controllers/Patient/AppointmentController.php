@@ -3,8 +3,13 @@
 namespace App\Http\Controllers\Patient;
 
 use App\Http\Controllers\Controller;
+use App\Models\Appointment;
+use App\Models\Doctor;
+use App\Models\DoctorSchedule;
+use App\Models\Patient;
 use App\Models\Poli;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class AppointmentController extends Controller
@@ -62,7 +67,61 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
-        // Logic for storing appointment will go here
+        $validated = $request->validate([
+            'poli_id' => 'required|exists:polis,id',
+            'doctor_id' => 'required|exists:doctors,id',
+            'appointment_date' => 'required|date',
+            'start_time' => 'required|string',
+        ]);
+
+        $patient = Patient::where('user_id', Auth::id())->first();
+        if (!$patient) {
+            return redirect()->back()->with('error', 'Data pasien tidak ditemukan.');
+        }
+
+        $doctor = Doctor::findOrFail($validated['doctor_id']);
+        $schedule = DoctorSchedule::where('doctor_id', $validated['doctor_id'])
+            ->where('is_active', true)
+            ->first();
+
+        if (!$schedule) {
+            return redirect()->back()->with('error', 'Jadwal dokter tidak tersedia.');
+        }
+
+        // Check for existing appointment at same time
+        $existing = Appointment::where('doctor_id', $validated['doctor_id'])
+            ->where('appointment_date', $validated['appointment_date'])
+            ->where('start_time', $validated['start_time'])
+            ->where('status', 'booked')
+            ->exists();
+
+        if ($existing) {
+            return redirect()->back()->with('error', 'Slot waktu ini sudah dipesan. Silakan pilih waktu lain.');
+        }
+
+        // Generate queue number with SH-### format
+        $lastQueue = Appointment::where('appointment_date', $validated['appointment_date'])
+            ->where('status', 'booked')
+            ->count();
+        $queueNumber = 'SH-' . str_pad($lastQueue + 1, 3, '0', STR_PAD_LEFT);
+
+        // Calculate end time based on slot_duration
+        $startTime = $validated['start_time'];
+        $endTime = date('H:i:s', strtotime($startTime . ' + ' . $schedule->slot_duration . ' minutes'));
+
+        Appointment::create([
+            'queue_number' => $queueNumber,
+            'patient_id' => $patient->id,
+            'doctor_id' => $validated['doctor_id'],
+            'poli_id' => $validated['poli_id'],
+            'schedule_id' => $schedule->id,
+            'appointment_date' => $validated['appointment_date'],
+            'start_time' => $startTime,
+            'end_time' => $endTime,
+            'status' => 'booked',
+        ]);
+
+        return redirect()->route('patient.kunjungan')->with('success', 'Kunjungan berhasil dibuat.');
     }
 
     /**

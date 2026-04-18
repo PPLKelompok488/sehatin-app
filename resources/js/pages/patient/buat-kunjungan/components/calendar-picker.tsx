@@ -4,7 +4,7 @@ import * as React from 'react';
 
 interface CalendarPickerProps {
     selectedDate: Date | null;
-    onDateSelect: (date: Date) => void;
+    onDateSelect: (date: Date | null) => void;
     onResetSelection: () => void;
     availableDays: string[];
 }
@@ -76,13 +76,13 @@ export default function CalendarPicker({
                 <div className="flex items-center gap-4">
                     <h3 className="text-sm font-semibold text-on-surface-variant">Pilih Tanggal</h3>
                     <div className="flex gap-2">
-                        <button 
+                        <button
                             onClick={(e) => { e.preventDefault(); scroll('left'); }}
                             className="w-8 h-8 cursor-pointer rounded-full border border-outline-variant/30 flex items-center justify-center hover:bg-surface-container transition-colors"
                         >
                             <ChevronLeft className="size-4" />
                         </button>
-                        <button 
+                        <button
                             onClick={(e) => { e.preventDefault(); scroll('right'); }}
                             className="w-8 h-8 cursor-pointer rounded-full border border-outline-variant/30 flex items-center justify-center hover:bg-surface-container transition-colors"
                         >
@@ -92,12 +92,12 @@ export default function CalendarPicker({
                 </div>
                 {selectedDate && (
                     <span className="text-xs font-bold text-primary bg-primary/10 px-4 py-1.5 rounded-full">
-                        {selectedDate.toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric' })}
+                        {selectedDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
                     </span>
                 )}
             </div>
 
-            <div 
+            <div
                 ref={scrollRef}
                 onMouseDown={handleMouseDown}
                 onMouseLeave={handleMouseLeave}
@@ -119,13 +119,17 @@ export default function CalendarPicker({
                             key={idx}
                             disabled={!isAvailable}
                             onClick={() => {
-                                onDateSelect(date);
-                                onResetSelection();
-                            }}
+                                if (isSelected) {
+                                    onDateSelect(null);
+                                } else {
+                                    onDateSelect(date);
+                                    onResetSelection();
+                                }
+                                }}  
                             className={cn(
                                 "flex-shrink-0 w-20 h-24 cursor-pointer rounded-lg rounded-r-2xl flex flex-col items-center justify-center transition-all duration-100 border",
-                                isSelected 
-                                    ? "bg-primary border-primary text-on-primary" 
+                                isSelected
+                                    ? "bg-primary border-primary text-on-primary"
                                     : "bg-white border-border hover:border-primary/60 text-on-surface",
                                 !isAvailable && "bg-muted opacity-50 border-muted/50 hover:border-muted cursor-not-allowed grayscale-[1]"
                             )}
