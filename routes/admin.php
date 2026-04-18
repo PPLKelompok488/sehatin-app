@@ -17,8 +17,14 @@ Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(functi
     Route::delete('schedules/{id}', [\App\Http\Controllers\Admin\DoctorScheduleController::class, 'destroy'])
         ->name('schedules.destroy');
 
-    Route::get('polis', fn() => Inertia::render('admin/polis/pages/polis'))
+    Route::get('polis', [\App\Http\Controllers\Admin\PoliController::class, 'index'])
         ->name('polis');
+    Route::post('polis', [\App\Http\Controllers\Admin\PoliController::class, 'store'])
+        ->name('polis.store');
+    Route::put('polis/{id}', [\App\Http\Controllers\Admin\PoliController::class, 'update'])
+        ->name('polis.update');
+    Route::delete('polis/{id}', [\App\Http\Controllers\Admin\PoliController::class, 'destroy'])
+        ->name('polis.destroy');
 
     Route::get('doctors', fn() => Inertia::render('admin/doctors/pages/doctors'))
         ->name('doctors');
