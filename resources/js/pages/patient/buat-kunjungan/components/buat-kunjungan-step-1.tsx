@@ -1,34 +1,41 @@
 import { cn } from '@/lib/utils';
-import { CheckCircle2, Info, Baby, Stethoscope, BriefcaseMedical } from 'lucide-react';
-import * as React from 'react';
+import { 
+    CheckCircle2, 
+    Info, 
+    Baby, 
+    Stethoscope, 
+    BriefcaseMedical, 
+    Activity, 
+    Heart, 
+    Brain, 
+    HeartPulse,
+    LucideIcon
+} from 'lucide-react';
 
-const POLIS = [
-    {
-        id: 'umum',
-        name: 'Poli Umum',
-        description: 'Layanan pemeriksaan kesehatan menyeluruh dan konsultasi awal medis.',
-        icon: Stethoscope,
-    },
-    {
-        id: 'gigi',
-        name: 'Poli Gigi',
-        description: 'Perawatan kesehatan mulut, pembersihan karang gigi, dan penambalan.',
-        icon: BriefcaseMedical,
-    },
-    {
-        id: 'anak',
-        name: 'Poli Anak',
-        description: 'Layanan kesehatan pediatrik untuk tumbuh kembang optimal sang buah hati.',
-        icon: Baby,
-    },
-];
+const IconMap: Record<string, LucideIcon> = {
+    Stethoscope,
+    Baby,
+    BriefcaseMedical,
+    Activity,
+    Heart,
+    Brain,
+    HeartPulse,
+};
+
+interface Poli {
+    id: number;
+    name: string;
+    description: string;
+    icon: string;
+}
 
 interface BuatKunjunganStep1Props {
     onSelect: (poliId: string) => void;
     selectedPoliId: string | null;
+    polis: Poli[];
 }
 
-export default function BuatKunjunganStep1({ onSelect, selectedPoliId }: BuatKunjunganStep1Props) {
+export default function BuatKunjunganStep1({ onSelect, selectedPoliId, polis }: BuatKunjunganStep1Props) {
     return (
         <div className="space-y-12 animate-in fade-in slide-in-from-right-4 duration-500">
             <div className="space-y-2">
@@ -39,22 +46,22 @@ export default function BuatKunjunganStep1({ onSelect, selectedPoliId }: BuatKun
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {POLIS.map((poli) => {
-                    const isSelected = selectedPoliId === poli.id;
-                    const Icon = poli.icon;
+                {polis.map((poli) => {
+                    const isSelected = selectedPoliId === poli.id.toString();
+                    const Icon = IconMap[poli.icon] || Stethoscope;
 
                     return (
                         <button
                             key={poli.id}
-                            onClick={() => onSelect(poli.id)}
+                            onClick={() => onSelect(poli.id.toString())}
                             className={cn(
-                                "group relative p-8 rounded-lg text-left overflow-hidden transition-all duration-300 cursor-pointer",
+                                "group relative p-8 rounded-lg text-left overflow-hidden transition-all duration-100 cursor-pointer",
                                 "border border-outline-variant/10",
-                                isSelected && "ring-2 ring-primary bg-primary/5 border-primary/20 shadow-xl shadow-primary/5"
+                                isSelected && "ring-2 ring-primary border-primary/20 shadow-xl shadow-primary/5"
                             )}
                         >
                             <div className={cn(
-                                "absolute top-0 right-0 w-32 h-32 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-110",
+                                "absolute top-0 right-0 w-32 h-32 rounded-full -mr-16 -mt-16 transition-transform",
                                 isSelected ? "bg-primary/20" : "bg-primary/5"
                             )} />
 
@@ -66,7 +73,12 @@ export default function BuatKunjunganStep1({ onSelect, selectedPoliId }: BuatKun
                                 "text-xl font-bold mb-2 transition-colors",
                                 isSelected ? "text-primary" : "text-on-surface"
                             )}>
-                                {poli.name}
+                                <div className="flex items-center gap-2">
+                                    {poli.name}
+                                    {isSelected && (
+                                        <CheckCircle2 className="size-4" />
+                                    )}
+                                </div>
                             </h3>
                             <p className="text-sm text-on-surface-variant leading-relaxed">
                                 {poli.description}
@@ -76,11 +88,7 @@ export default function BuatKunjunganStep1({ onSelect, selectedPoliId }: BuatKun
                                 "mt-6 flex items-center gap-2 text-primary font-bold text-xs tracking-wider transition-opacity duration-300",
                                 isSelected ? "opacity-100" : "opacity-0 group-hover:opacity-100"
                             )}>
-                                {isSelected ? (
-                                    <>Terpilih <CheckCircle2 className="size-4" /></>
-                                ) : (
-                                    <>Pilih</>
-                                )}
+
                             </div>
                         </button>
                     );

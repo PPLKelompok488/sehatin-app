@@ -5,7 +5,18 @@ import BuatKunjunganStep1 from '../components/buat-kunjungan-step-1';
 import { BuatKunjunganStepper } from '../components/buat-kunjungan-stepper';
 import { BuatKunjunganFooter } from '../components/buat-kunjungan-footer';
 
-export default function BuatKunjungan() {
+interface Poli {
+    id: number;
+    name: string;
+    description: string;
+    icon: string;
+}
+
+interface BuatKunjunganProps {
+    polis: Poli[];
+}
+
+export default function BuatKunjungan({ polis }: BuatKunjunganProps) {
     const [step, setStep] = React.useState(1);
     const [selectedPoli, setSelectedPoli] = React.useState<string | null>(null);
 
@@ -31,6 +42,7 @@ export default function BuatKunjungan() {
                             <BuatKunjunganStep1 
                                 selectedPoliId={selectedPoli}
                                 onSelect={(id) => setSelectedPoli(id)}
+                                polis={polis}
                             />
                         )}
                         {step === 2 && (
