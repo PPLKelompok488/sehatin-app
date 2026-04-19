@@ -1,6 +1,6 @@
 import { PageHeader } from '@/components/page-header';
 import AppLayout from '@/layouts/app-layout';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, useForm, router } from '@inertiajs/react';
 import { useState } from 'react';
 
 interface ClosestAppointment {
@@ -26,11 +26,37 @@ interface Props {
 }
 
 export default function Kunjungan({ appointments, closestAppointment, totalKunjungan }: Props) {
-    const [filterStatus, setFilterStatus] = useState<'booked' | 'completed'>('booked');
+    const [filterStatus, setFilterStatus] = useState<'booked' | 'completed' | 'cancelled'>('booked');
     const [filterDate, setFilterDate] = useState<string>('');
 
+    const [cancelModalOpen, setCancelModalOpen] = useState(false);
+    const [selectedCancelId, setSelectedCancelId] = useState<number | null>(null);
+
+    const { data: cancelData, setData: setCancelData, post: postCancel, processing: cancelProcessing, reset: resetCancel } = useForm({
+        cancel_reason: ''
+    });
+
+    const openCancelModal = (id: number) => {
+        setSelectedCancelId(id);
+        setCancelModalOpen(true);
+    };
+
+    const closeCancelModal = () => {
+        setCancelModalOpen(false);
+        setSelectedCancelId(null);
+        resetCancel();
+    };
+
+    const confirmCancel = () => {
+        if (!selectedCancelId || !cancelData.cancel_reason.trim()) return;
+        postCancel(route('patient.kunjungan.cancel', { id: selectedCancelId }), {
+            onSuccess: () => closeCancelModal(),
+            preserveScroll: true
+        });
+    };
+
     const filteredAppointments = appointments?.filter(a => {
-        const matchStatus = filterStatus === 'booked' ? a.status === 'booked' : a.status !== 'booked';
+        const matchStatus = a.status === filterStatus;
         const matchDate = filterDate ? a.raw_date === filterDate : true;
         return matchStatus && matchDate;
     }) || [];
@@ -114,13 +140,18 @@ export default function Kunjungan({ appointments, closestAppointment, totalKunju
                 <div className="flex bg-surface-container/50 p-1 rounded-[14px] border border-outline-variant/30 text-sm font-medium w-full md:w-auto">
                     <button 
                         onClick={() => setFilterStatus('booked')}
-                        className={`px-6 py-2 rounded-xl w-1/2 md:w-auto whitespace-nowrap transition-colors ${filterStatus === 'booked' ? 'bg-surface shadow-sm text-primary font-bold' : 'text-on-surface-variant hover:text-on-surface font-medium'}`}>
+                        className={`px-4 py-2 rounded-xl w-1/3 md:w-auto whitespace-nowrap transition-colors ${filterStatus === 'booked' ? 'bg-surface shadow-sm text-primary font-bold' : 'text-on-surface-variant hover:text-on-surface font-medium'}`}>
                             Aktif
                     </button>
                     <button 
                         onClick={() => setFilterStatus('completed')}
-                        className={`px-6 py-2 rounded-xl w-1/2 md:w-auto whitespace-nowrap transition-colors ${filterStatus === 'completed' ? 'bg-surface shadow-sm text-primary font-bold' : 'text-on-surface-variant hover:text-on-surface font-medium'}`}>
+                        className={`px-4 py-2 rounded-xl w-1/3 md:w-auto whitespace-nowrap transition-colors ${filterStatus === 'completed' ? 'bg-surface shadow-sm text-primary font-bold' : 'text-on-surface-variant hover:text-on-surface font-medium'}`}>
                             Selesai
+                    </button>
+                    <button 
+                        onClick={() => setFilterStatus('cancelled')}
+                        className={`px-4 py-2 rounded-xl w-1/3 md:w-auto whitespace-nowrap transition-colors ${filterStatus === 'cancelled' ? 'bg-surface shadow-sm text-primary font-bold' : 'text-on-surface-variant hover:text-on-surface font-medium'}`}>
+                            Batal
                     </button>
                 </div>
                 <div className="flex items-center gap-3 w-full md:w-auto">
@@ -167,13 +198,21 @@ export default function Kunjungan({ appointments, closestAppointment, totalKunju
                                     <span className="material-symbols-outlined text-[#FF9500] text-[18px]" style={{ fontVariationSettings: "'FILL' 0" }}>local_activity</span>
                                     {app.queue_number}
                                 </div>
-                                <div className={`flex items-center gap-1.5 text-[9px] bg-transparent md:mx-6 tracking-wide font-extrabold ${app.status === 'booked' ? 'text-[#4188F1]' : 'text-[#34C759]'}`}>
-                                    <div className={`w-1 h-1 rounded-full ${app.status === 'booked' ? 'bg-[#4188F1] animate-pulse' : 'bg-[#34C759]'}`}></div>
-                                    {app.status === 'booked' ? 'AKTIF' : 'SELESAI'}
+                                <div className={`flex items-center gap-1.5 text-[9px] bg-transparent md:mx-6 tracking-wide font-extrabold ${app.status === 'booked' ? 'text-[#4188F1]' : (app.status === 'completed' ? 'text-[#34C759]' : 'text-destructive')}`}>
+                                    <div className={`w-1 h-1 rounded-full ${app.status === 'booked' ? 'bg-[#4188F1] animate-pulse' : (app.status === 'completed' ? 'bg-[#34C759]' : 'bg-destructive')}`}></div>
+                                    {app.status === 'booked' ? 'AKTIF' : (app.status === 'completed' ? 'SELESAI' : 'DIBATALKAN')}
                                 </div>
                             </div>
 
-                            <div className="shrink-0 flex justify-end w-full md:w-auto mt-2 md:mt-0">
+                            <div className="shrink-0 flex justify-end w-full md:w-auto mt-4 md:mt-0 gap-3">
+                                {app.status === 'booked' && (
+                                    <button 
+                                        onClick={() => openCancelModal(app.id)}
+                                        className="bg-transparent border border-primary/50 hover:bg-primary/10 text-primary font-bold text-sm px-4 py-2 rounded-xl flex items-center gap-1 transition-colors">
+                                        <span className="material-symbols-outlined text-[16px]">cancel</span>
+                                        Batalkan kunjungan
+                                    </button>
+                                )}
                                 <button className="bg-surface-container/50 hover:bg-surface-container text-on-surface-variant font-bold text-sm px-5 py-2 rounded-xl flex items-center gap-1 transition-colors">
                                     Detail
                                     <span className="material-symbols-outlined text-[16px]">chevron_right</span>
@@ -194,6 +233,51 @@ export default function Kunjungan({ appointments, closestAppointment, totalKunju
                    Tampilkan Lebih Banyak
                </button>
             </div>
+
+            {/* Cancel Modal */}
+            {cancelModalOpen && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 font-['Manrope'] overflow-y-auto">
+                    <div 
+                        className="bg-white rounded-[24px] w-full max-w-md shadow-2xl overflow-hidden flex flex-col transform transition-all"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="px-6 pt-6 pb-4 flex justify-between items-center border-b border-border/40">
+                            <h3 className="text-xl font-extrabold text-foreground">Batalkan Kunjungan</h3>
+                            <button 
+                                onClick={closeCancelModal}
+                                className="w-8 h-8 rounded-full bg-surface-container/50 flex items-center justify-center text-on-surface-variant hover:bg-surface-container transition-colors"
+                            >
+                                <span className="material-symbols-outlined text-[20px]">close</span>
+                            </button>
+                        </div>
+                        
+                        <div className="p-6">
+                            <label className="block text-sm font-bold text-on-surface-variant mb-2">Alasan Pembatalan</label>
+                            <textarea
+                                className="w-full bg-surface-container/30 border border-outline-variant/40 rounded-xl p-4 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all min-h-[120px] resize-none outline-none"
+                                placeholder="Berikan alasan pembatalan Anda..."
+                                value={cancelData.cancel_reason}
+                                onChange={e => setCancelData('cancel_reason', e.target.value)}
+                            ></textarea>
+                            
+                            <div className="mt-8 flex flex-col gap-3">
+                                <button 
+                                    onClick={confirmCancel}
+                                    disabled={cancelProcessing || !cancelData.cancel_reason.trim()}
+                                    className="w-full bg-primary text-primary-foreground border-none py-3.5 rounded-xl font-bold text-[15px] shadow-sm hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                                    {cancelProcessing ? 'Memproses...' : 'Konfirmasi Pembatalan'}
+                                </button>
+                                <button 
+                                    onClick={closeCancelModal}
+                                    disabled={cancelProcessing}
+                                    className="w-full bg-surface-container/50 hover:bg-surface-container text-on-surface-variant border-none py-3.5 rounded-xl font-bold text-[15px] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                                    Kembali
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </AppLayout>
     );
 }
