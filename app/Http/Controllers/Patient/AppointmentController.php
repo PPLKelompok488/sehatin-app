@@ -199,4 +199,32 @@ class AppointmentController extends Controller
     {
         //
     }
+
+    /**
+     * Cancel an appointment.
+     */
+    public function cancel(Request $request, string $id)
+    {
+        $request->validate([
+            'cancel_reason' => 'required|string|max:255',
+        ]);
+
+        $patient = Auth::user()->patient;
+
+        $appointment = Appointment::where('id', $id)
+            ->where('patient_id', $patient->id)
+            ->firstOrFail();
+
+        if ($appointment->status === 'booked') {
+            $appointment->update([
+                'status' => 'cancelled',
+                'cancel_reason' => $request->cancel_reason,
+                'cancelled_by' => 'patient'
+            ]);
+
+            return redirect()->back()->with('success', 'Kunjungan berhasil dibatalkan.');
+        }
+
+        return redirect()->back()->with('error', 'Kunjungan ini tidak dapat dibatalkan.');
+    }
 }
