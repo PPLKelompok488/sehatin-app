@@ -5,7 +5,7 @@ use Inertia\Inertia;
 
 Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
 
-    Route::get('dashboard', fn() => Inertia::render('admin/dashboard/pages/dashboard'))
+    Route::get('dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])
         ->name('dashboard');
 
     Route::get('schedules', [\App\Http\Controllers\Admin\DoctorScheduleController::class, 'index'])
