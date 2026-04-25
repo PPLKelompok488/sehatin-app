@@ -16,47 +16,39 @@ class AppointmentSeeder extends Seeder
         $doctors = Doctor::all();
 
         foreach ($allPatients as $patient) {
-            // Past appointments (completed)
-            $completedAppointments = Appointment::factory(2)->create([
+            // Last month appointments (mostly completed)
+            Appointment::factory(rand(1, 3))->create([
                 'patient_id' => $patient->id,
                 'doctor_id' => $doctors->random()->id,
                 'poli_id' => function (array $attributes) {
                     return Doctor::find($attributes['doctor_id'])->poli_id;
                 },
-                'appointment_date' => fake()->dateTimeBetween('-1 month', '-1 day')->format('Y-m-d'),
+                'appointment_date' => fake()->dateTimeBetween('-2 months', '-1 month')->format('Y-m-d'),
                 'status' => 'completed',
+                'created_at' => fake()->dateTimeBetween('-2 months', '-1 month'),
             ]);
 
-            foreach ($completedAppointments as $appointment) {
-                MedicalRecord::factory()->create([
-                    'appointment_id' => $appointment->id,
-                    'doctor_id' => $appointment->doctor_id,
-                    'patient_id' => $appointment->patient_id,
-                ]);
+            // This month appointments (mix of completed and booked)
+            $thisMonthAppointments = Appointment::factory(rand(2, 4))->create([
+                'patient_id' => $patient->id,
+                'doctor_id' => $doctors->random()->id,
+                'poli_id' => function (array $attributes) {
+                    return Doctor::find($attributes['doctor_id'])->poli_id;
+                },
+                'appointment_date' => fake()->dateTimeBetween('-1 month', 'now')->format('Y-m-d'),
+                'status' => fake()->randomElement(['completed', 'booked', 'cancelled']),
+                'created_at' => fake()->dateTimeBetween('-1 month', 'now'),
+            ]);
+
+            foreach ($thisMonthAppointments as $appointment) {
+                if ($appointment->status === 'completed') {
+                    MedicalRecord::factory()->create([
+                        'appointment_id' => $appointment->id,
+                        'doctor_id' => $appointment->doctor_id,
+                        'patient_id' => $appointment->patient_id,
+                    ]);
+                }
             }
-
-            Appointment::factory(1)->create([
-                'patient_id' => $patient->id,
-                'doctor_id' => $doctors->random()->id,
-                'poli_id' => function (array $attributes) {
-                    return Doctor::find($attributes['doctor_id'])->poli_id;
-                },
-                'appointment_date' => fake()->dateTimeBetween('now', '+1 month')->format('Y-m-d'),
-                'status' => 'booked',
-            ]);
-
-            // Cancelled appointments
-            Appointment::factory(1)->create([
-                'patient_id' => $patient->id,
-                'doctor_id' => $doctors->random()->id,
-                'poli_id' => function (array $attributes) {
-                    return Doctor::find($attributes['doctor_id'])->poli_id;
-                },
-                'appointment_date' => fake()->dateTimeBetween('-1 month', '+1 month')->format('Y-m-d'),
-                'status' => 'cancelled',
-                'cancel_reason' => 'Pasien ada keperluan mendadak',
-                'cancelled_by' => 'patient',
-            ]);
         }
     }
 }
