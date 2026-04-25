@@ -17,6 +17,9 @@ Route::middleware(['role:patient'])->prefix('patient')->name('patient.')->group(
     Route::post('buat-kunjungan', [AppointmentController::class, 'store'])
         ->name('buat-kunjungan.store');
 
+    Route::get('kunjungan/{appointment}', [AppointmentController::class, 'show'])
+        ->name('kunjungan.show');
+
     Route::post('kunjungan/{id}/cancel', [AppointmentController::class, 'cancel'])
         ->name('kunjungan.cancel');
 });
