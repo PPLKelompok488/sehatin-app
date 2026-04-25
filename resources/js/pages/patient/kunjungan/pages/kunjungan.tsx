@@ -91,25 +91,25 @@ export default function Kunjungan({ appointments, closestAppointment, totalKunju
                 </div>
 
                 {/* Jadwal Terdekat */}
-                <div className="bg-[#4188F1] rounded-[20px] p-6 flex flex-col justify-between shadow-md text-white">
+                <div className="bg-primary rounded-[20px] p-6 flex flex-col justify-between shadow-md text-on-primary">
                     <div className="flex justify-between items-start mb-6">
                         <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center">
-                            <span className="material-symbols-outlined text-white text-[24px]" style={{ fontVariationSettings: "'FILL' 0" }}>schedule</span>
+                            <span className="material-symbols-outlined text-on-primary text-[24px]" style={{ fontVariationSettings: "'FILL' 0" }}>schedule</span>
                         </div>
                         <div className="flex items-center gap-2 bg-white/10 px-2 py-1.5 rounded-full border border-white/20">
                             <div className="w-6 h-6 rounded-full bg-white/30 overflow-hidden shrink-0 flex justify-center items-center">
-                                <span className="material-symbols-outlined text-white text-xs">face</span>
+                                <span className="material-symbols-outlined text-on-primary text-xs">face</span>
                             </div>
                             <div className="text-[10px] font-semibold pr-2">
-                                <span className="font-normal text-white/80 text-[8px] block leading-none mb-0.5">Dengan</span>
+                                <span className="font-normal text-on-primary/80 text-[8px] block leading-none mb-0.5">Dengan</span>
                                 {closestAppointment?.doctor_name || '-'}
                             </div>
                         </div>
                     </div>
                     <div>
-                        <p className="text-xs font-medium text-white/80 mb-2">Jadwal Terdekat</p>
+                        <p className="text-xs font-medium text-on-primary/80 mb-2">Jadwal Terdekat</p>
                         <h2 className="text-[22px] font-extrabold flex items-center gap-2 leading-tight">{closestAppointment?.date || 'Tidak Ada'}</h2>
-                        <p className="text-xs font-medium text-white/80 mt-1">{closestAppointment?.time || '-'}</p>
+                        <p className="text-xs font-medium text-on-primary/80 mt-1">{closestAppointment?.time || '-'}</p>
                     </div>
                 </div>
 
@@ -119,7 +119,7 @@ export default function Kunjungan({ appointments, closestAppointment, totalKunju
                         <div className="w-12 h-12 rounded-2xl bg-primary/5 flex items-center justify-center text-primary">
                             <span className="material-symbols-outlined text-[24px]" style={{ fontVariationSettings: "'FILL' 0" }}>monitoring</span>
                         </div>
-                        <div className="w-2 h-2 rounded-full bg-[#10B981] mt-1.5 mr-1 shadow-[0_0_0_4px_rgba(16,185,129,0.15)] hidden md:block"></div>
+                        <div className="w-2 h-2 rounded-full bg-success mt-1.5 mr-1 shadow-[0_0_0_4px_rgba(16,185,129,0.15)] hidden md:block"></div>
                     </div>
                     <div>
                         <p className="text-xs font-semibold text-on-surface-variant/70 mb-3">Vitals Summary</p>
@@ -180,26 +180,26 @@ export default function Kunjungan({ appointments, closestAppointment, totalKunju
                     filteredAppointments.map((app) => (
                         <div key={app.id} className="bg-surface border border-outline-variant/30 rounded-[20px] p-4 flex flex-col md:flex-row md:items-center justify-between gap-5 shadow-sm hover:shadow-md transition-shadow">
                             <div className="flex items-center gap-4 w-[280px]">
-                                <div className="w-12 h-12 rounded-full overflow-hidden shrink-0 bg-[#E8F0FE] flex items-center justify-center">
-                                    <span className="material-symbols-outlined text-[#4188F1] text-[24px]">face</span>
+                                <div className="w-12 h-12 rounded-full overflow-hidden shrink-0 bg-primary/10 flex items-center justify-center">
+                                    <span className="material-symbols-outlined text-primary text-[24px]">face</span>
                                 </div>
                                 <div className="flex-1">
                                     <h3 className="font-extrabold text-on-surface text-[15px]">{app.doctor_name}</h3>
-                                    <p className="text-[11px] font-semibold text-[#4188F1] mt-0.5">{app.poli_name}</p>
+                                    <p className="text-[11px] font-semibold text-primary mt-0.5">{app.poli_name}</p>
                                 </div>
                             </div>
 
                             <div className="flex items-center md:gap-14 flex-1 text-xs font-bold text-on-surface-variant justify-between md:justify-start w-full md:w-auto">
                                 <div className="flex items-center gap-2">
-                                    <span className="material-symbols-outlined text-[#4188F1] text-[18px]" style={{ fontVariationSettings: "'FILL' 0" }}>schedule</span>
+                                    <span className="material-symbols-outlined text-primary text-[18px]" style={{ fontVariationSettings: "'FILL' 0" }}>schedule</span>
                                     {app.date_time}
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <span className="material-symbols-outlined text-[#FF9500] text-[18px]" style={{ fontVariationSettings: "'FILL' 0" }}>local_activity</span>
+                                    <span className="material-symbols-outlined text-warning text-[18px]" style={{ fontVariationSettings: "'FILL' 0" }}>local_activity</span>
                                     {app.queue_number}
                                 </div>
-                                <div className={`flex items-center gap-1.5 text-[9px] bg-transparent md:mx-6 tracking-wide font-extrabold ${app.status === 'booked' ? 'text-[#4188F1]' : (app.status === 'completed' ? 'text-[#34C759]' : 'text-destructive')}`}>
-                                    <div className={`w-1 h-1 rounded-full ${app.status === 'booked' ? 'bg-[#4188F1] animate-pulse' : (app.status === 'completed' ? 'bg-[#34C759]' : 'bg-destructive')}`}></div>
+                                <div className={`flex items-center gap-1.5 text-[9px] bg-transparent md:mx-6 tracking-wide font-extrabold ${app.status === 'booked' ? 'text-primary' : (app.status === 'completed' ? 'text-success' : 'text-destructive')}`}>
+                                    <div className={`w-1 h-1 rounded-full ${app.status === 'booked' ? 'bg-primary animate-pulse' : (app.status === 'completed' ? 'bg-success' : 'bg-destructive')}`}></div>
                                     {app.status === 'booked' ? 'AKTIF' : (app.status === 'completed' ? 'SELESAI' : 'DIBATALKAN')}
                                 </div>
                             </div>
@@ -208,15 +208,18 @@ export default function Kunjungan({ appointments, closestAppointment, totalKunju
                                 {app.status === 'booked' && (
                                     <button 
                                         onClick={() => openCancelModal(app.id)}
-                                        className="bg-transparent border border-primary/50 hover:bg-primary/10 text-primary font-bold text-sm px-4 py-2 rounded-xl flex items-center gap-1 transition-colors">
+                                        className="bg-transparent border border-destructive/50 hover:bg-destructive/10 text-destructive font-bold text-sm px-4 py-2 rounded-xl flex items-center gap-1 transition-colors">
                                         <span className="material-symbols-outlined text-[16px]">cancel</span>
                                         Batalkan kunjungan
                                     </button>
                                 )}
-                                <button className="bg-surface-container/50 hover:bg-surface-container text-on-surface-variant font-bold text-sm px-5 py-2 rounded-xl flex items-center gap-1 transition-colors">
+                                <Link 
+                                    href={route('patient.kunjungan.show', { appointment: app.id })}
+                                    className="bg-surface-container/50 hover:bg-surface-container text-on-surface-variant font-bold text-sm px-5 py-2 rounded-xl flex items-center gap-1 transition-colors"
+                                >
                                     Detail
                                     <span className="material-symbols-outlined text-[16px]">chevron_right</span>
-                                </button>
+                                </Link>
                             </div>
                         </div>
                     ))
@@ -264,7 +267,7 @@ export default function Kunjungan({ appointments, closestAppointment, totalKunju
                                 <button 
                                     onClick={confirmCancel}
                                     disabled={cancelProcessing || !cancelData.cancel_reason.trim()}
-                                    className="w-full bg-primary text-primary-foreground border-none py-3.5 rounded-xl font-bold text-[15px] shadow-sm hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                                    className="w-full bg-destructive text-destructive-foreground border-none py-3.5 rounded-xl font-bold text-[15px] shadow-sm hover:bg-destructive/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                                     {cancelProcessing ? 'Memproses...' : 'Konfirmasi Pembatalan'}
                                 </button>
                                 <button 
