@@ -139,7 +139,7 @@ export default function DoctorSchedule({
 
                     {/* Next Patient Card */}
                     {stats.next_patient ? (
-                        <div className="bg-gradient-to-br from-[#0061A5] to-[#5BA7F7] p-3.5 rounded-xl flex items-center justify-between text-white group hover:translate-y-[-1px] transition-all shadow-lg shadow-primary/20">
+                        <div className="bg-primary p-3.5 rounded-xl flex items-center justify-between text-white group hover:translate-y-[-1px] transition-all shadow-lg shadow-primary/20">
                             <div className="flex items-center gap-5">
                                 <div className="w-11 h-11 rounded-xl overflow-hidden border border-white/30 flex-shrink-0 bg-white/10 flex items-center justify-center text-white font-bold text-sm">
                                     {getInitials(stats.next_patient.name)}
@@ -163,7 +163,7 @@ export default function DoctorSchedule({
                             </span>
                         </div>
                     ) : (
-                        <div className="bg-gradient-to-br from-gray-100 to-gray-50 p-3.5 rounded-xl border border-outline-variant/10 flex items-center gap-5">
+                        <div className="bg-primary p-3.5 rounded-xl border border-outline-variant/10 flex items-center gap-5">
                             <div className="w-12 h-12 rounded-xl bg-gray-200/50 flex items-center justify-center text-gray-400">
                                 <span className="material-symbols-outlined text-2xl">person</span>
                             </div>
@@ -279,7 +279,7 @@ export default function DoctorSchedule({
                                                     {appointments.length > 0 && (
                                                         <div className={`rounded-xl p-2 h-full flex flex-col justify-center ${
                                                             isNextPatient
-                                                                ? 'bg-gradient-to-br from-[#0061A5] to-[#5BA7F7] text-white shadow-lg shadow-primary/20'
+                                                                ? 'bg-primary text-white shadow-lg shadow-primary/20'
                                                                 : 'bg-surface-container-high/50 border-l-4 border-primary'
                                                         }`}>
                                                             <div className="flex items-center gap-2 mb-1">
