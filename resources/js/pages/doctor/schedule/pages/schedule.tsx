@@ -164,14 +164,14 @@ export default function DoctorSchedule({
                         </div>
                     ) : (
                         <div className="bg-primary p-3.5 rounded-xl border border-outline-variant/10 flex items-center gap-5">
-                            <div className="w-12 h-12 rounded-xl bg-gray-200/50 flex items-center justify-center text-gray-400">
+                            <div className="w-12 h-12 rounded-xl bg-gray-200/50 flex items-center justify-center text-white">
                                 <span className="material-symbols-outlined text-2xl">person</span>
                             </div>
                             <div>
-                                <p className="text-[10px] font-medium text-on-surface-variant/70 leading-none">
+                                <p className="text-[10px] font-medium text-white leading-none">
                                     Pasien Selanjutnya
                                 </p>
-                                <p className="text-sm font-semibold text-on-surface-variant mt-1.5">
+                                <p className="text-sm font-semibold text-white mt-1.5">
                                     Tidak ada
                                 </p>
                             </div>
@@ -211,26 +211,23 @@ export default function DoctorSchedule({
                         {weekDays.map((date, idx) => (
                             <div
                                 key={idx}
-                                className={`p-6 text-center border-l border-outline-variant/10 relative ${
-                                    isToday(date) ? 'bg-primary/5' : ''
-                                }`}
+                                className={`p-6 text-center border-l border-outline-variant/10 relative ${isToday(date) ? 'bg-primary/5' : ''
+                                    }`}
                             >
-                                <p className={`text-[10px] font-bold uppercase tracking-widest ${
-                                    isToday(date)
-                                        ? 'text-primary'
-                                        : WEEKEND_INDICES.includes(idx)
-                                          ? 'text-error/60'
-                                          : 'text-on-surface-variant/60'
-                                }`}>
+                                <p className={`text-[10px] font-bold uppercase tracking-widest ${isToday(date)
+                                    ? 'text-primary'
+                                    : WEEKEND_INDICES.includes(idx)
+                                        ? 'text-error/60'
+                                        : 'text-on-surface-variant/60'
+                                    }`}>
                                     {DAY_NAMES[idx]}
                                 </p>
-                                <p className={`text-xl font-extrabold mt-1 ${
-                                    isToday(date)
-                                        ? 'text-primary'
-                                        : WEEKEND_INDICES.includes(idx)
-                                          ? 'text-error/80'
-                                          : ''
-                                }`}>
+                                <p className={`text-xl font-extrabold mt-1 ${isToday(date)
+                                    ? 'text-primary'
+                                    : WEEKEND_INDICES.includes(idx)
+                                        ? 'text-error/80'
+                                        : ''
+                                    }`}>
                                     {format(date, 'd')}
                                 </p>
                                 {isToday(date) && (
@@ -277,17 +274,15 @@ export default function DoctorSchedule({
                                                     className="border-l border-b border-outline-variant/5 p-2 min-h-[60px]"
                                                 >
                                                     {appointments.length > 0 && (
-                                                        <div className={`rounded-xl p-2 h-full flex flex-col justify-center ${
-                                                            isNextPatient
-                                                                ? 'bg-primary text-white shadow-lg shadow-primary/20'
-                                                                : 'bg-surface-container-high/50 border-l-4 border-primary'
-                                                        }`}>
+                                                        <div className={`rounded-xl p-2 h-full flex flex-col justify-center ${isNextPatient
+                                                            ? 'bg-primary text-white shadow-lg shadow-primary/20'
+                                                            : 'bg-surface-container-high/50 border-l-4 border-primary'
+                                                            }`}>
                                                             <div className="flex items-center gap-2 mb-1">
-                                                                <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 ${
-                                                                    isNextPatient
-                                                                        ? 'bg-white/20 text-white'
-                                                                        : 'bg-primary/20 text-primary'
-                                                                }`}>
+                                                                <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 ${isNextPatient
+                                                                    ? 'bg-white/20 text-white'
+                                                                    : 'bg-primary/20 text-primary'
+                                                                    }`}>
                                                                     {getInitials(appointments[0].patient.user.name)}
                                                                 </div>
                                                                 <span className="text-[10px] font-bold truncate leading-tight">
