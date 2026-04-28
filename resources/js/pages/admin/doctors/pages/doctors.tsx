@@ -202,7 +202,7 @@ function DoctorModal({ doctor, polis, open, onClose }: DoctorModalProps) {
             description="Lengkapi formulir di bawah ini dengan informasi yang valid."
             icon={UserPlus}
             footer={
-                <Button onClick={handleSubmit} disabled={submitting} className="w-full py-6 rounded-xl font-bold bg-blue-500 hover:bg-blue-600 text-white shadow-sm">
+                <Button onClick={handleSubmit} disabled={submitting} className="w-full py-6 rounded-xl font-bold bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20">
                     {submitting ? 'Menyimpan...' : 'Simpan Data'}
                 </Button>
             }
@@ -366,7 +366,7 @@ function DoctorModal({ doctor, polis, open, onClose }: DoctorModalProps) {
                                 onClick={() => setForm({ ...form, is_active: value })}
                                 className={cn(
                                     "flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-bold transition-all border-2",
-                                    form.is_active === value ? "border-blue-500 text-on-surface bg-white" : "border-outline-variant/20 bg-surface-container/30 text-on-surface-variant"
+                                    form.is_active === value ? "border-primary text-primary bg-white shadow-sm" : "border-outline-variant/20 bg-surface-container/30 text-on-surface-variant"
                                 )}
                             >
                                 <div className={`w-2 h-2 rounded-full ${color}`} />
@@ -502,7 +502,7 @@ export default function Doctors() {
                         label: 'Total Dokter',
                         value: stats.total,
                         icon: UserCircle,
-                        bg: 'bg-blue-50',
+                        bg: 'bg-primary/5',
                         color: 'text-primary',
                     },
                     {
@@ -584,7 +584,7 @@ export default function Doctors() {
                                     className={cn(
                                         "w-full text-left px-4 py-2.5 text-sm transition-colors",
                                         filter === opt.value
-                                            ? "bg-blue-50 text-primary font-bold"
+                                            ? "bg-primary/5 text-primary font-bold"
                                             : "text-on-surface hover:bg-surface-container/50"
                                     )}
                                 >
@@ -637,7 +637,7 @@ export default function Doctors() {
                                         {/* Nama Dokter */}
                                         <td className="px-6 py-5 align-middle">
                                             <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-primary flex-shrink-0 overflow-hidden border border-blue-100">
+                                                <div className="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center text-primary flex-shrink-0 overflow-hidden border border-primary/10">
                                                     {doctor.avatar_url ? (
                                                         <img src={doctor.avatar_url} alt={doctor.user.name} className="w-full h-full object-cover" />
                                                     ) : (
