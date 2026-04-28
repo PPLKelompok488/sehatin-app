@@ -26,6 +26,12 @@ Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(functi
     Route::delete('polis/{id}', [\App\Http\Controllers\Admin\PoliController::class, 'destroy'])
         ->name('polis.destroy');
 
-    Route::get('doctors', fn() => Inertia::render('admin/doctors/pages/doctors'))
+    Route::get('doctors', [\App\Http\Controllers\Admin\DoctorController::class, 'index'])
         ->name('doctors');
+    Route::post('doctors', [\App\Http\Controllers\Admin\DoctorController::class, 'store'])
+        ->name('doctors.store');
+    Route::put('doctors/{id}', [\App\Http\Controllers\Admin\DoctorController::class, 'update'])
+        ->name('doctors.update');
+    Route::delete('doctors/{id}', [\App\Http\Controllers\Admin\DoctorController::class, 'destroy'])
+        ->name('doctors.destroy');
 });
