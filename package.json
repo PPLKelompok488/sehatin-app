@@ -7,17 +7,25 @@
         "dev": "vite",
         "format": "prettier --write resources/",
         "format:check": "prettier --check resources/",
-        "lint": "eslint . --fix"
+        "lint": "eslint . --fix",
+        "test": "php artisan test",
+        "test:e2e": "mocha tests/Browser/specs/*.spec.js --timeout 30000",
+        "test:e2e:headless": "mocha tests/Browser/specs/*.spec.js --timeout 30000 --headless",
+        "test:all": "npm run test && npm run test:e2e"
     },
     "devDependencies": {
         "@eslint/js": "^9.19.0",
+        "chai": "^6.2.2",
+        "chromedriver": "^143.0.4",
         "eslint": "^9.17.0",
         "eslint-config-prettier": "^10.0.1",
         "eslint-plugin-react": "^7.37.3",
         "eslint-plugin-react-hooks": "^5.1.0",
+        "mocha": "^11.7.5",
         "prettier": "^3.4.2",
         "prettier-plugin-organize-imports": "^4.1.0",
         "prettier-plugin-tailwindcss": "^0.6.11",
+        "selenium-webdriver": "^4.43.0",
         "typescript-eslint": "^8.23.0"
     },
     "dependencies": {

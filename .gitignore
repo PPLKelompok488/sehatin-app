@@ -4,7 +4,7 @@
 .env.production
 .env.testing
 .phpactor.json
-.phpunit.result.cache
+.phpunit.result.cache]
 /.fleet
 /.idea
 /.nova
@@ -24,4 +24,5 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
-.agents/
+.agents/tests/Browser/screenshots/
+.agents/tests/Browser/videos/
