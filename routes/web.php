@@ -9,8 +9,17 @@ Route::get('/', function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
+        return match (auth()->user()->role) {
+            'admin'   => redirect()->route('admin.dashboard'),
+            'doctor'  => redirect()->route('doctor.schedule'),
+            'patient' => redirect()->route('patient.kunjungan'),
+            default   => redirect('/'),
+        };
     })->name('dashboard');
+
+    require __DIR__.'/admin.php';
+    require __DIR__.'/doctor.php';
+    require __DIR__.'/patient.php';
 });
 
 require __DIR__.'/settings.php';

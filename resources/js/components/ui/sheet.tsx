@@ -38,6 +38,7 @@ const sheetVariants = cva(
                 bottom: 'inset-x-0 bottom-0 border-t data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom',
                 left: 'inset-y-0 left-0 h-full w-3/4 border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm',
                 right: 'inset-y-0 right-0 h-full w-3/4  border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm',
+                center: 'left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] w-[calc(100%-32px)] max-w-[540px] h-[85%] rounded-xl border data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:fade-out data-[state=open]:fade-in sm:inset-y-0 sm:right-0 sm:left-auto sm:top-auto sm:translate-x-0 sm:translate-y-0 sm:h-full sm:w-3/4 sm:rounded-none sm:rounded-l-md sm:border-l sm:border-none sm:data-[state=closed]:slide-out-to-right sm:data-[state=open]:slide-in-from-right',
             },
         },
         defaultVariants: {
@@ -46,7 +47,7 @@ const sheetVariants = cva(
     },
 );
 
-interface SheetContentProps extends React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content>, VariantProps<typeof sheetVariants> {}
+interface SheetContentProps extends React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content>, VariantProps<typeof sheetVariants> { }
 
 const SheetContent = React.forwardRef<React.ElementRef<typeof SheetPrimitive.Content>, SheetContentProps>(
     ({ side = 'right', className, children, ...props }, ref) => (
@@ -54,8 +55,8 @@ const SheetContent = React.forwardRef<React.ElementRef<typeof SheetPrimitive.Con
             <SheetOverlay />
             <SheetPrimitive.Content ref={ref} className={cn(sheetVariants({ side }), className)} {...props}>
                 {children}
-                <SheetPrimitive.Close className="absolute right-6 top-6 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
-                    <X className="h-4 w-4" />
+                <SheetPrimitive.Close className="cursor-pointer absolute right-6 top-8 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
+                    <X className="h-5 w-5" />
                     <span className="sr-only">Close</span>
                 </SheetPrimitive.Close>
             </SheetPrimitive.Content>

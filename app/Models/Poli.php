@@ -13,6 +13,7 @@ class Poli extends Model
 
     protected $fillable = [
         'name',
+        'icon',
         'description',
         'is_active',
     ];
