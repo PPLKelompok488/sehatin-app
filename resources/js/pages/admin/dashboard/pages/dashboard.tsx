@@ -93,25 +93,25 @@ export default function AdminDashboard({ stats, visitStats, favoritePolis, topDo
                                     </linearGradient>
                                 </defs>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-                                <XAxis 
-                                    dataKey="day" 
-                                    axisLine={false} 
-                                    tickLine={false} 
+                                <XAxis
+                                    dataKey="day"
+                                    axisLine={false}
+                                    tickLine={false}
                                     tick={{ fill: '#94a3b8', fontSize: 12 }}
                                     dy={10}
                                 />
                                 <YAxis hide />
-                                <Tooltip 
+                                <Tooltip
                                     contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
                                     cursor={{ stroke: '#e2e8f0', strokeWidth: 2 }}
                                 />
-                                <Area 
-                                    type="monotone" 
-                                    dataKey="visits" 
-                                    stroke="var(--color-primary)" 
+                                <Area
+                                    type="monotone"
+                                    dataKey="visits"
+                                    stroke="var(--color-primary)"
                                     strokeWidth={4}
-                                    fillOpacity={1} 
-                                    fill="url(#colorVisits)" 
+                                    fillOpacity={1}
+                                    fill="url(#colorVisits)"
                                     dot={{ r: 4, fill: 'var(--color-primary)', strokeWidth: 2, stroke: '#fff' }}
                                     activeDot={{ r: 6, fill: 'var(--color-primary)', strokeWidth: 2, stroke: '#fff' }}
                                 />
@@ -141,11 +141,11 @@ export default function AdminDashboard({ stats, visitStats, favoritePolis, topDo
                                             <span className="font-bold text-slate-900">{poli.count}</span>
                                         </div>
                                         <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
-                                            <div 
-                                                className="h-full rounded-full transition-all duration-1000" 
-                                                style={{ 
+                                            <div
+                                                className="h-full rounded-full transition-all duration-1000"
+                                                style={{
                                                     width: `${(poli.count / (favoritePolis[0]?.count || 1)) * 100}%`,
-                                                    backgroundColor: poli.color 
+                                                    backgroundColor: poli.color
                                                 }}
                                             />
                                         </div>
