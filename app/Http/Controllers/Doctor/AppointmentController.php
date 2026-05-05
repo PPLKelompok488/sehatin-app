@@ -19,10 +19,10 @@ class AppointmentController extends Controller
             : today()->startOfWeek();
         $weekEnd = $weekStart->copy()->addDays(6)->endOfDay();
 
-        // Get today's booked appointments (selalu hari ini)
+        // Get today's appointments (selalu hari ini)
         $todayAppointments = Appointment::with(['patient.user', 'poli'])
             ->where('doctor_id', $doctor->id)
-            ->where('status', 'booked')
+            ->whereIn('status', ['booked', 'completed'])
             ->whereDate('appointment_date', today())
             ->orderBy('start_time', 'ASC')
             ->get();
@@ -30,7 +30,7 @@ class AppointmentController extends Controller
         // Get appointments untuk minggu yang dipilih
         $upcomingAppointments = Appointment::with(['patient.user', 'poli'])
             ->where('doctor_id', $doctor->id)
-            ->where('status', 'booked')
+            ->whereIn('status', ['booked', 'completed'])
             ->whereDate('appointment_date', '>=', $weekStart)
             ->whereDate('appointment_date', '<=', $weekEnd)
             ->orderBy('appointment_date', 'ASC')
@@ -40,7 +40,7 @@ class AppointmentController extends Controller
 
         // Total pasien minggu yang sedang dilihat
         $totalWeek = Appointment::where('doctor_id', $doctor->id)
-            ->where('status', 'booked')
+            ->whereIn('status', ['booked', 'completed'])
             ->whereDate('appointment_date', '>=', $weekStart)
             ->whereDate('appointment_date', '<=', $weekEnd)
             ->count();
