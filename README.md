@@ -67,3 +67,8 @@ npm run dev
 ```bash
 http://127.0.0.1:8000
 ```
+```bash
+npm install
+npm install chromedriver@latest --save-dev
+npm install chromedriver@143 --save-dev
+```bash
