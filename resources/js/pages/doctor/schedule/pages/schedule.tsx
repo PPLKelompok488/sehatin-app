@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
-import { router } from '@inertiajs/react';
+import { router, Link } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { Head } from '@inertiajs/react';
 import { format, parseISO, addDays, isToday } from 'date-fns';
 import { id as idLocale } from 'date-fns/locale';
+import { cn } from '@/lib/utils';
 
 interface Patient {
     id: number;
@@ -33,7 +34,7 @@ interface Props {
     stats: {
         total_today: number;
         total_week: number;
-        next_patient: { name: string; time_slot: string } | null;
+        next_patient: { id: number; name: string; time_slot: string } | null;
     };
     currentWeekStart: string;
 }
@@ -139,7 +140,10 @@ export default function DoctorSchedule({
 
                     {/* Next Patient Card */}
                     {stats.next_patient ? (
-                        <div className="bg-primary p-3.5 rounded-xl flex items-center justify-between text-white group hover:translate-y-[-1px] transition-all shadow-lg shadow-primary/20">
+                        <Link
+                            href={route('doctor.medical-record.show', stats.next_patient.id)}
+                            className="bg-primary p-3.5 rounded-xl flex items-center justify-between text-white group hover:translate-y-[-1px] transition-all shadow-lg shadow-primary/20"
+                        >
                             <div className="flex items-center gap-5">
                                 <div className="w-11 h-11 rounded-xl overflow-hidden border border-white/30 flex-shrink-0 bg-white/10 flex items-center justify-center text-white font-bold text-sm">
                                     {getInitials(stats.next_patient.name)}
@@ -161,7 +165,7 @@ export default function DoctorSchedule({
                             <span className="material-symbols-outlined text-white/50 group-hover:text-white transition-colors text-xl">
                                 arrow_forward
                             </span>
-                        </div>
+                        </Link>
                     ) : (
                         <div className="bg-primary p-3.5 rounded-xl border border-outline-variant/10 flex items-center gap-5">
                             <div className="w-12 h-12 rounded-xl bg-gray-200/50 flex items-center justify-center text-white">
@@ -274,15 +278,22 @@ export default function DoctorSchedule({
                                                     className="border-l border-b border-outline-variant/5 p-2 min-h-[60px]"
                                                 >
                                                     {appointments.length > 0 && (
-                                                        <div className={`rounded-xl p-2 h-full flex flex-col justify-center ${isNextPatient
-                                                            ? 'bg-primary text-white shadow-lg shadow-primary/20'
-                                                            : 'bg-surface-container-high/50 border-l-4 border-primary'
-                                                            }`}>
+                                                        <Link
+                                                            href={route('doctor.medical-record.show', appointments[0].id)}
+                                                            className={cn(
+                                                                'rounded-xl p-2 h-full flex flex-col justify-center transition-all hover:scale-[1.02] active:scale-95',
+                                                                isNextPatient
+                                                                    ? 'bg-primary text-white shadow-lg shadow-primary/20'
+                                                                    : 'bg-surface-container-high/50 border-l-4 border-primary'
+                                                            )}
+                                                        >
                                                             <div className="flex items-center gap-2 mb-1">
-                                                                <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 ${isNextPatient
-                                                                    ? 'bg-white/20 text-white'
-                                                                    : 'bg-primary/20 text-primary'
-                                                                    }`}>
+                                                                <div className={cn(
+                                                                    'w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0',
+                                                                    isNextPatient
+                                                                        ? 'bg-white/20 text-white'
+                                                                        : 'bg-primary/20 text-primary'
+                                                                )}>
                                                                     {getInitials(appointments[0].patient.user.name)}
                                                                 </div>
                                                                 <span className="text-[10px] font-bold truncate leading-tight">
@@ -291,7 +302,7 @@ export default function DoctorSchedule({
                                                                         : appointments[0].patient.user.name}
                                                                 </span>
                                                             </div>
-                                                        </div>
+                                                        </Link>
                                                     )}
                                                 </div>
                                             );
