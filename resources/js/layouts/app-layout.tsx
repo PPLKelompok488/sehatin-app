@@ -134,10 +134,11 @@ export default function AppLayout({ children }: AppLayoutProps) {
                                 <Link
                                     href={route('logout')}
                                     method="post"
-                                    className="hidden p-2.5 text-on-surface-variant hover:text-red-500 hover:bg-red-50 rounded-xl transition-all md:flex items-center justify-center border border-transparent hover:border-red-100"
+                                    className="hidden p-2 text-on-surface-variant hover:text-red-500 hover:bg-surface-container rounded-full transition-colors md:flex items-center justify-center"
+                                    aria-label="Keluar"
                                     title="Keluar"
                                 >
-                                    keluar
+                                    <LogOut size={20} />
                                 </Link>
                             </div>
                         </div>
