@@ -3,24 +3,13 @@ import { By, until } from 'selenium-webdriver';
 import { createDriver, BASE_URL } from '../setup.js';
 
 // Helpers
-async function loginAsAdmin(driver) {
-    // Helper untuk login sebagai admin, 
-    // Sesuaikan URL dan elemen input dengan halaman login di aplikasi Anda.
+async function login(driver) {
     await driver.get(`${BASE_URL}/login`);
-    
-    try {
-        const emailField = await driver.wait(until.elementLocated(By.id('email')), 3000);
-        await emailField.sendKeys('admin@gmail.com'); 
-        await driver.findElement(By.id('password')).sendKeys('Password123@');
-        
-        const loginBtn = await driver.findElement(By.xpath("//button[contains(text(), 'Masuk') or @type='submit']"));
-        await loginBtn.click();
-        
-        // Tunggu hingga redirect ke dashboard selesai
-        await driver.wait(until.urlContains('/dashboard'), 5000);
-    } catch (e) {
-        console.log('Form login tidak ditemukan atau bypass login aktif.');
-    }
+    await driver.wait(until.elementLocated(By.id('email')), 5000);
+    await driver.findElement(By.id('email')).sendKeys('admin@gmail.com');
+    await driver.findElement(By.id('password')).sendKeys('Password123@');
+    await driver.findElement(By.xpath("//button[contains(., 'Masuk')]")).click();
+    await driver.wait(until.urlContains('/admin'), 10000);
 }
 
 describe('Admin Statistik Dashboard', function () {
@@ -31,7 +20,7 @@ describe('Admin Statistik Dashboard', function () {
     before(async function () {
         driver = await createDriver();
         // Login sebagai admin sebelum menjalankan test suite
-        await loginAsAdmin(driver);
+        await login(driver);
     });
 
     after(async function () {
