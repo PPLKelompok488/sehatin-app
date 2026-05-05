@@ -50,6 +50,7 @@ class AppointmentController extends Controller
         $nextAppointment = $todayAppointments->first();
         if ($nextAppointment) {
             $nextPatient = [
+                'id'        => $nextAppointment->id,
                 'name'      => $nextAppointment->patient->user->name ?? 'Pasien',
                 'time_slot' => $nextAppointment->start_time,
             ];
