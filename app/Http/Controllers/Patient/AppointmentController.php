@@ -171,9 +171,45 @@ class AppointmentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Appointment $appointment)
     {
-        //
+        $patient = Auth::user()->patient;
+
+        // Pastikan pasien hanya bisa melihat datanya sendiri
+        if ($appointment->patient_id !== $patient->id) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Load relasi yang dibutuhkan untuk UI
+        $appointment->load(['doctor.user', 'doctor.poli', 'poli', 'medicalRecord']);
+
+        $dateObj = \Carbon\Carbon::parse($appointment->appointment_date);
+
+        return Inertia::render('patient/kunjungan/pages/detail-kunjungan', [
+            'appointment' => [
+                'id' => $appointment->id,
+                'doctor_name' => $appointment->doctor->user->name ?? 'Dokter',
+                'poli_name' => $appointment->poli->name ?? 'Umum',
+                'date' => $dateObj->translatedFormat('d F Y'),
+                'time' => \Carbon\Carbon::parse($appointment->start_time)->format('H:i') . ' WIB',
+                'queue_number' => $appointment->queue_number,
+                'status' => $appointment->status,
+                'cancel_reason' => $appointment->cancel_reason,
+                'cancelled_by' => $appointment->cancelled_by,
+                'medical_record' => $appointment->medicalRecord ? [
+                    'subjective' => $appointment->medicalRecord->subjective,
+                    'objective' => $appointment->medicalRecord->objective,
+                    'assessment' => $appointment->medicalRecord->assessment,
+                    'plan' => $appointment->medicalRecord->plan,
+                    'blood_pressure' => $appointment->medicalRecord->blood_pressure,
+                    'heart_rate' => $appointment->medicalRecord->heart_rate,
+                    'temperature' => $appointment->medicalRecord->temperature,
+                    'weight' => $appointment->medicalRecord->weight,
+                    'blood_sugar' => $appointment->medicalRecord->blood_sugar,
+                    'medicine' => $appointment->medicalRecord->medicine,
+                ] : null,
+            ],
+        ]);
     }
 
     /**

@@ -28,14 +28,20 @@ class PatientSeeder extends Seeder
                 'email' => $data['email'],
                 'password' => $password,
                 'role' => 'patient',
+                'created_at' => fake()->dateTimeBetween('-2 months', 'now'),
             ]);
 
             Patient::factory()->create([
                 'user_id' => $user->id,
+                'created_at' => $user->created_at,
             ]);
         }
 
         // Create random additional patients
-        Patient::factory(5)->create();
+        Patient::factory(5)->create([
+            'created_at' => function () {
+                return fake()->dateTimeBetween('-2 months', 'now');
+            }
+        ]);
     }
 }
