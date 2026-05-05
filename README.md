@@ -71,4 +71,8 @@ http://127.0.0.1:8000
 npm install
 npm install chromedriver@latest --save-dev
 npm install chromedriver@143 --save-dev
-```bash
+
+(Get-Item "C:\Program Files\Google\Chrome\Application\chrome.exe").VersionInfo.ProductVersion
+
+npm run test:e2e
+```
