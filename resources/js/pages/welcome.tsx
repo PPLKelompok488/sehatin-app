@@ -68,7 +68,7 @@ export default function Welcome() {
                 <section className="relative min-h-[800px] flex items-center px-6 md:px-20 overflow-hidden bg-background">
                     {/* Right image */}
                     <div className="absolute right-0 top-0 w-1/2 h-full hidden lg:block">
-                        <div className="absolute inset-0 bg-background/80 z-10" />
+                        <div className="absolute inset-0 z-10" />
                         <img
                             alt="Digital Health Platform"
                             className="w-full h-full object-cover"
