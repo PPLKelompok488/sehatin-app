@@ -81,11 +81,15 @@ export default function DoctorSchedule({
         router.get(route('doctor.schedule'), { week_start: nextWeek }, { preserveScroll: true });
     };
 
-    const getAppointmentsForTimeSlot = (date: Date, time: string): Appointment[] => {
-        const dateStr = format(date, 'yyyy-MM-dd');
-        const appointments = upcomingAppointments[dateStr] || [];
-        return appointments.filter(apt => apt.start_time.startsWith(time));
-    };
+const getAppointmentsForTimeSlot = (date: Date, time: string): Appointment[] => {
+    const dateStr = format(date, 'yyyy-MM-dd');
+    const appointments = upcomingAppointments[dateStr] || [];
+    const slotHour = parseInt(time.split(':')[0]);
+    return appointments.filter(apt => {
+        const aptHour = parseInt(apt.start_time.split(':')[0]);
+        return aptHour === slotHour;
+    });
+};
 
     return (
         <AppLayout>
