@@ -8,6 +8,7 @@ export default function Welcome() {
 
     const bookNowHref = auth.user ? route('patient.kunjungan') : route('login');
 
+
     return (
         <>
             <Head title="SEHATIN - Platform Kesehatan Digital" />
