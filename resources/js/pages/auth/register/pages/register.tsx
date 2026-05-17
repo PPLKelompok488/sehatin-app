@@ -1,4 +1,4 @@
-import { Head, useForm } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import { Check } from 'lucide-react';
 import * as React from 'react';
 import { BrandLogo } from '@/components/ui/brand-logo';
@@ -61,8 +61,20 @@ export default function Register() {
     };
 
     return (
-        <div className="bg-surface font-body text-on-surface antialiased overflow-x-hidden">
+        <div className="bg-surface font-body text-on-surface antialiased overflow-x-hidden relative">
             <Head title="Pendaftaran Pasien" />
+
+            {/* Elegant transparent Back Button (white on desktop, black on mobile) */}
+            <div className="absolute top-6 left-6 z-50">
+                <Link
+                    href={route('home')}
+                    className="inline-flex items-center justify-center gap-2 px-0 py-2 bg-transparent text-black lg:text-white hover:opacity-80 transition-all duration-200 font-bold text-sm"
+                >
+                    <span className="material-symbols-outlined text-lg">arrow_back</span>
+                    Kembali
+                </Link>
+            </div>
+
             <main className="min-h-screen grid lg:grid-cols-[4fr_6fr]">
                 {/* Left Section */}
                 <section className="hidden lg:flex relative bg-primary flex-col p-12 overflow-hidden">

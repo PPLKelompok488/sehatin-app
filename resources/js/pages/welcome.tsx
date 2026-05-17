@@ -1,10 +1,13 @@
 import { type SharedData } from '@/types';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { BrandLogo } from '@/components/ui/brand-logo';
 import { Head, Link, usePage } from '@inertiajs/react';
 
 export default function Welcome() {
     const { auth } = usePage<SharedData>().props;
 
     const bookNowHref = auth.user ? route('patient.kunjungan') : route('login');
+
 
     return (
         <>
@@ -27,12 +30,7 @@ export default function Welcome() {
             <header className="fixed top-0 w-full z-50 glass-nav border-b border-[#E2E8F0]">
                 <div className="relative flex items-center px-6 py-3 w-full">
                     {/* Logo – left */}
-                    <div className="flex items-center gap-1.5">
-                        <span className="material-symbols-outlined text-primary text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>
-                            favorite
-                        </span>
-                        <span className="font-headline font-extrabold text-xl text-on-surface">Sehatin</span>
-                    </div>
+                    <BrandLogo size={8} />
 
                     {/* Nav – center */}
                     <nav className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
@@ -40,22 +38,39 @@ export default function Welcome() {
                         <a className="text-on-surface-variant hover:text-primary transition-colors" href="#layanan">Layanan</a>
                     </nav>
 
-                    {/* Right – profile or empty */}
-                    <div className="ml-auto flex items-center gap-3">
+                    {/* Right – profile or action buttons */}
+                    <div className="ml-auto flex items-center gap-4">
                         {auth.user ? (
-                            <Link href={route('dashboard')} className="flex items-center gap-2 group">
-                                {/* Avatar initial */}
-                                <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold text-sm">
-                                    {auth.user.name?.charAt(0).toUpperCase()}
+                            <Link href={route('dashboard')} className="flex items-center gap-3 group">
+                                <Avatar className="h-9 w-9 border-2 border-primary/20 group-hover:border-primary transition-colors">
+                                    <AvatarFallback className="bg-primary text-on-primary font-bold text-sm">
+                                        {auth.user.name?.charAt(0).toUpperCase()}
+                                    </AvatarFallback>
+                                </Avatar>
+                                {/* User Info (hidden on mobile) */}
+                                <div className="hidden md:flex flex-col items-start leading-none">
+                                    <span className="text-sm font-bold text-on-surface group-hover:text-primary transition-colors">
+                                        {auth.user.name}
+                                    </span>
+                                    <span className="text-[10px] font-semibold text-on-surface-variant capitalize mt-0.5">
+                                        {auth.user.role}
+                                    </span>
                                 </div>
-                                {/* Role badge */}
-                                <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-surface-container text-primary capitalize hidden md:inline">
-                                    {auth.user.role}
-                                </span>
                             </Link>
                         ) : (
-                            <div className="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant">
-                                <span className="material-symbols-outlined text-xl">person</span>
+                            <div className="flex items-center gap-4">
+                                <Link
+                                    href={route('login')}
+                                    className="text-sm font-bold text-on-surface hover:text-primary transition-colors duration-200"
+                                >
+                                    Login
+                                </Link>
+                                <Link
+                                    href={route('register')}
+                                    className="inline-flex items-center justify-center px-5 py-2.5 rounded-xl bg-primary text-sm font-bold text-on-primary shadow-sm hover:brightness-95 active:scale-95 transition-all duration-200"
+                                >
+                                    Register
+                                </Link>
                             </div>
                         )}
                     </div>
@@ -63,7 +78,6 @@ export default function Welcome() {
             </header>
 
             <main className="pt-16">
-
                 {/* ── HERO ── */}
                 <section className="relative min-h-[800px] flex items-center px-6 md:px-20 overflow-hidden bg-background">
                     {/* Right image */}
@@ -242,7 +256,6 @@ export default function Welcome() {
                         </div>
                     </div>
                 </section>
-
             </main>
 
             {/* ── FOOTER ── */}
@@ -250,10 +263,7 @@ export default function Welcome() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mb-20">
                     {/* Brand */}
                     <div className="space-y-6">
-                        <div className="flex items-center gap-1.5">
-                            <span className="material-symbols-outlined text-primary text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>favorite</span>
-                            <span className="font-headline font-extrabold text-xl text-on-surface">Sehatin</span>
-                        </div>
+                        <BrandLogo size={8} />
                         <p className="text-sm text-on-surface-variant leading-relaxed">
                             Platform kesehatan digital masa depan untuk klinik kecil. Berfokus pada kemudahan akses data medis mandiri dan efisiensi pelayanan kesehatan tanpa kertas.
                         </p>
