@@ -47,7 +47,7 @@ DB_DATABASE=test
 DB_USERNAME=root
 DB_PASSWORD=
 ```
-<b>Nyalakan Laragon/Xampp</b>
+<b>Menyalakan Laragon/Xampp</b>
 ```bash
 php artisan migrate --seed
 ```
