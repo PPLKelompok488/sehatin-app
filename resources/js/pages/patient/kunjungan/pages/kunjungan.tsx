@@ -2,35 +2,12 @@ import { PageHeader } from '@/components/page-header';
 import AppLayout from '@/layouts/app-layout';
 import { Head, Link, useForm, router } from '@inertiajs/react';
 import { useState } from 'react';
-import {
-    Activity,
-    Baby,
-    Bone,
-    Brain,
-    Dna,
-    Ear,
-    Eye,
-    Heart,
-    HeartPulse,
-    Microscope,
-    Stethoscope,
-    Syringe,
-    LucideIcon
-} from 'lucide-react';
-
-const IconMap: Record<string, LucideIcon> = {
-    Stethoscope,
-    Brain,
-    Baby,
-    HeartPulse,
-    Activity,
-    Heart,
-    Bone,
-    Eye,
-    Ear,
-    Microscope,
-    Dna,
-    Syringe,
+const getDoctorInitials = (name: string): string => {
+    const words = name.trim().split(/\s+/);
+    if (words.length >= 2) {
+        return (words[0][0] + words[1][0]).toUpperCase();
+    }
+    return name.slice(0, 2).toUpperCase();
 };
 
 interface ClosestAppointment {
@@ -211,11 +188,8 @@ export default function Kunjungan({ appointments, closestAppointment, totalKunju
                     filteredAppointments.map((app) => (
                         <div key={app.id} className="bg-surface border border-outline-variant/30 rounded-[20px] p-4 flex flex-col md:flex-row md:items-center justify-between gap-5 shadow-sm hover:shadow-md transition-shadow">
                             <div className="flex items-center gap-4 w-[280px]">
-                                <div className="w-12 h-12 rounded-full overflow-hidden shrink-0 bg-primary/10 flex items-center justify-center text-primary">
-                                    {(() => {
-                                        const Icon = IconMap[app.poli_icon] || Stethoscope;
-                                        return <Icon className="size-6" />;
-                                    })()}
+                                <div className="w-12 h-12 rounded-full overflow-hidden shrink-0 bg-primary/10 flex items-center justify-center">
+                                    <span className="text-sm font-extrabold text-primary">{getDoctorInitials(app.doctor_name)}</span>
                                 </div>
                                 <div className="flex-1">
                                     <h3 className="font-extrabold text-on-surface text-[15px]">{app.doctor_name}</h3>
