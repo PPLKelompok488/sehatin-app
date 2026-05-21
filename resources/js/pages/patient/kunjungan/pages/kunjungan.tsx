@@ -2,6 +2,36 @@ import { PageHeader } from '@/components/page-header';
 import AppLayout from '@/layouts/app-layout';
 import { Head, Link, useForm, router } from '@inertiajs/react';
 import { useState } from 'react';
+import {
+    Activity,
+    Baby,
+    Bone,
+    Brain,
+    Dna,
+    Ear,
+    Eye,
+    Heart,
+    HeartPulse,
+    Microscope,
+    Stethoscope,
+    Syringe,
+    LucideIcon
+} from 'lucide-react';
+
+const IconMap: Record<string, LucideIcon> = {
+    Stethoscope,
+    Brain,
+    Baby,
+    HeartPulse,
+    Activity,
+    Heart,
+    Bone,
+    Eye,
+    Ear,
+    Microscope,
+    Dna,
+    Syringe,
+};
 
 interface ClosestAppointment {
     date: string;
@@ -13,6 +43,7 @@ interface AppointmentItem {
     id: number;
     doctor_name: string;
     poli_name: string;
+    poli_icon: string;
     raw_date: string;
     date_time: string;
     queue_number: string;
@@ -180,8 +211,11 @@ export default function Kunjungan({ appointments, closestAppointment, totalKunju
                     filteredAppointments.map((app) => (
                         <div key={app.id} className="bg-surface border border-outline-variant/30 rounded-[20px] p-4 flex flex-col md:flex-row md:items-center justify-between gap-5 shadow-sm hover:shadow-md transition-shadow">
                             <div className="flex items-center gap-4 w-[280px]">
-                                <div className="w-12 h-12 rounded-full overflow-hidden shrink-0 bg-primary/10 flex items-center justify-center">
-                                    <span className="material-symbols-outlined text-primary text-[24px]">face</span>
+                                <div className="w-12 h-12 rounded-full overflow-hidden shrink-0 bg-primary/10 flex items-center justify-center text-primary">
+                                    {(() => {
+                                        const Icon = IconMap[app.poli_icon] || Stethoscope;
+                                        return <Icon className="size-6" />;
+                                    })()}
                                 </div>
                                 <div className="flex-1">
                                     <h3 className="font-extrabold text-on-surface text-[15px]">{app.doctor_name}</h3>

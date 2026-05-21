@@ -1,7 +1,37 @@
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { Head, Link } from '@inertiajs/react';
-import { ArrowLeft } from 'lucide-react';
+import {
+    Activity,
+    ArrowLeft,
+    Baby,
+    Bone,
+    Brain,
+    Dna,
+    Ear,
+    Eye,
+    Heart,
+    HeartPulse,
+    Microscope,
+    Stethoscope,
+    Syringe,
+    LucideIcon
+} from 'lucide-react';
+
+const IconMap: Record<string, LucideIcon> = {
+    Stethoscope,
+    Brain,
+    Baby,
+    HeartPulse,
+    Activity,
+    Heart,
+    Bone,
+    Eye,
+    Ear,
+    Microscope,
+    Dna,
+    Syringe,
+};
 
 interface MedicalRecord {
     subjective: string | null;
@@ -20,6 +50,7 @@ interface AppointmentDetail {
     id: number;
     doctor_name: string;
     poli_name: string;
+    poli_icon: string;
     date: string;
     time: string;
     queue_number: string;
@@ -83,8 +114,11 @@ export default function DetailKunjungan({ appointment }: Props) {
             <div className="bg-surface border border-outline-variant/30 rounded-[20px] p-6 mb-6 shadow-sm font-['Manrope']">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
                     <div className="flex items-center gap-4">
-                        <div className="w-14 h-14 rounded-full overflow-hidden shrink-0 bg-primary/10 flex items-center justify-center">
-                            <span className="material-symbols-outlined text-primary text-[28px]">face</span>
+                        <div className="w-14 h-14 rounded-full overflow-hidden shrink-0 bg-primary/10 flex items-center justify-center text-primary">
+                            {(() => {
+                                const Icon = IconMap[appointment.poli_icon] || Stethoscope;
+                                return <Icon className="size-7" />;
+                            })()}
                         </div>
                         <div>
                             <h2 className="text-xl font-extrabold text-on-surface">{appointment.doctor_name}</h2>
@@ -214,15 +248,7 @@ export default function DetailKunjungan({ appointment }: Props) {
                 </div>
             )}
 
-            {/* Footer Action */}
-            <div className="mt-8">
-                <Button variant="secondary" size="sm" asChild>
-                    <Link href={route('patient.kunjungan')}>
-                        <ArrowLeft className="size-4" />
-                        Kembali ke Riwayat
-                    </Link>
-                </Button>
-            </div>
+
         </AppLayout>
     );
 }
