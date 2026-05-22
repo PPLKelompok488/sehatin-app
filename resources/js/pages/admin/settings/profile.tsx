@@ -55,9 +55,19 @@ export default function AdminProfile({ user, status }: ProfileProps) {
         });
     };
 
-    const submit: FormEventHandler = (e) => {
+        const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        patch(route('profile.update'));
+        router.post(route('profile.update'), {
+            _method: 'PATCH',
+            name: data.name,
+            phone: data.phone,
+            avatar: data.avatar,
+            password: data.password,
+            password_confirmation: data.password_confirmation,
+        }, {
+            forceFormData: true,
+            preserveScroll: true,
+        });
     };
 
     return (
