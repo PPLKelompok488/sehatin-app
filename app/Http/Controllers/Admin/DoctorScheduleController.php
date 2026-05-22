@@ -65,11 +65,13 @@ class DoctorScheduleController extends Controller
         $validated = $request->validate([
             'day_of_week' => 'required|string',
             'start_time' => 'required',
-            'end_time' => 'required',
+            'end_time' => 'required|after:start_time',
             'slot_duration' => 'required|integer',
             'is_active' => 'required|boolean',
             'doctor_ids' => 'required|array',
             'doctor_ids.*' => 'exists:doctors,id',
+        ], [
+            'end_time.after' => 'Waktu selesai harus lebih lambat dari waktu mulai.',
         ]);
 
         foreach ($validated['doctor_ids'] as $doctorId) {
@@ -113,7 +115,7 @@ class DoctorScheduleController extends Controller
         $validated = $request->validate([
             'day_of_week' => 'required|string',
             'start_time' => 'required',
-            'end_time' => 'required',
+            'end_time' => 'required|after:start_time',
             'slot_duration' => 'required|integer',
             'is_active' => 'required|boolean',
             'doctor_ids' => 'required|array',
@@ -122,6 +124,8 @@ class DoctorScheduleController extends Controller
             'old_start_time' => 'required',
             'old_end_time' => 'required',
             'old_slot_duration' => 'required|integer',
+        ], [
+            'end_time.after' => 'Waktu selesai harus lebih lambat dari waktu mulai.',
         ]);
 
         foreach ($validated['doctor_ids'] as $doctorId) {
