@@ -66,13 +66,18 @@ export default function PatientProfile({ user, patient, status }: ProfileProps) 
                 if (fileInputRef.current) {
                     fileInputRef.current.value = '';
                 }
+                router.reload({ only: ['auth'] });
             },
         });
     };
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        post(route('patient.settings.profile.update'));
+        post(route('patient.settings.profile.update'), {
+            onSuccess: () => {
+                router.reload({ only: ['auth'] });
+            },
+        });
     };
 
     return (
