@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Doctor;
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class AppointmentController extends Controller
@@ -50,15 +51,37 @@ class AppointmentController extends Controller
         $nextAppointment = $todayAppointments->first();
         if ($nextAppointment) {
             $nextPatient = [
-                'id'        => $nextAppointment->id,
-                'name'      => $nextAppointment->patient->user->name ?? 'Pasien',
-                'time_slot' => $nextAppointment->start_time,
+                'id'         => $nextAppointment->id,
+                'name'       => $nextAppointment->patient->user->name ?? 'Pasien',
+                'time_slot'  => $nextAppointment->start_time,
+                'avatar_url' => $nextAppointment->patient->user->avatar 
+                    ? Storage::url($nextAppointment->patient->user->avatar) 
+                    : null,
             ];
         }
 
+        // Transform appointments to include avatar URLs
+        $todayAppointmentsTransformed = $todayAppointments->map(function ($apt) {
+            return array_merge($apt->toArray(), [
+                'avatar_url' => $apt->patient->user->avatar 
+                    ? Storage::url($apt->patient->user->avatar) 
+                    : null,
+            ]);
+        });
+
+        $upcomingAppointmentsTransformed = collect($upcomingAppointments)->map(function ($dayAppointments) {
+            return $dayAppointments->map(function ($apt) {
+                return array_merge($apt->toArray(), [
+                    'avatar_url' => $apt->patient->user->avatar 
+                        ? Storage::url($apt->patient->user->avatar) 
+                        : null,
+                ]);
+            });
+        });
+
         return Inertia::render('doctor/schedule/pages/schedule', [
-            'todayAppointments'   => $todayAppointments,
-            'upcomingAppointments' => $upcomingAppointments,
+            'todayAppointments'    => $todayAppointmentsTransformed,
+            'upcomingAppointments' => $upcomingAppointmentsTransformed,
             'stats' => [
                 'total_today'  => $todayAppointments->count(),
                 'total_week'   => $totalWeek,

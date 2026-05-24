@@ -1,6 +1,5 @@
-import { type SharedData } from '@/types';
 import AppLayout from '@/layouts/app-layout';
-import { Head, router, useForm, usePage } from '@inertiajs/react';
+import { Head, router, useForm } from '@inertiajs/react';
 import { FormEventHandler, useRef, useState, type ChangeEvent } from 'react';
 
 interface User {
@@ -17,13 +16,12 @@ interface ProfileProps {
 }
 
 export default function AdminProfile({ user, status }: ProfileProps) {
-    const { auth } = usePage<SharedData>().props;
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [avatarPreview, setAvatarPreview] = useState<string | null>(user.avatar_url ?? null);
 
-    const { data, setData, patch, processing, errors } = useForm({
+    const { data, setData, processing, errors } = useForm({
         name: user.name,
         phone: user.phone ?? '',
         avatar: null,
