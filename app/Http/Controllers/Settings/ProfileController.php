@@ -50,7 +50,7 @@ class ProfileController extends Controller
 
         $user->fill([
             'name' => $validated['name'],
-            'phone' => $validated['phone'],
+            'phone' => $validated['phone'] ?? null,
         ]);
 
         if ($request->hasFile('avatar')) {
