@@ -114,10 +114,39 @@ export default function AppLayout({ children }: AppLayoutProps) {
                                                 {user.role}
                                             </p>
                                         </div>
-                                        <DropdownMenuItem className="rounded-xl gap-3 py-3 font-semibold cursor-pointer focus:bg-primary/5 focus:text-primary transition-colors">
-                                            <User className="size-4 opacity-70" />
-                                            Profil Saya
-                                        </DropdownMenuItem>
+                                        {user.role === 'patient' && (
+                                            <DropdownMenuItem
+                                                asChild
+                                                className="rounded-xl gap-3 py-3 font-semibold cursor-pointer focus:bg-primary/5 focus:text-primary transition-colors"
+                                            >
+                                                <Link href={route('patient.settings.profile')}>
+                                                    <User className="size-4 opacity-70" />
+                                                    Profil Saya
+                                                </Link>
+                                            </DropdownMenuItem>
+                                        )}
+                                        {user.role === 'admin' && (
+                                            <DropdownMenuItem
+                                                asChild
+                                                className="rounded-xl gap-3 py-3 font-semibold cursor-pointer focus:bg-primary/5 focus:text-primary transition-colors"
+                                            >
+                                                <Link href={route('profile.edit')}>
+                                                    <User className="size-4 opacity-70" />
+                                                    Profil Saya
+                                                </Link>
+                                            </DropdownMenuItem>
+                                        )}
+                                        {user.role === 'doctor' && (
+                                            <DropdownMenuItem
+                                                asChild
+                                                className="rounded-xl gap-3 py-3 font-semibold cursor-pointer focus:bg-primary/5 focus:text-primary transition-colors"
+                                            >
+                                                <button type="button">
+                                                    <User className="size-4 opacity-70" />
+                                                    Profil Saya
+                                                </button>
+                                            </DropdownMenuItem>
+                                        )}
                                         <DropdownMenuSeparator className="my-2" />
                                         <DropdownMenuItem
                                             asChild

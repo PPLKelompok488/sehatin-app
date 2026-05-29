@@ -67,3 +67,13 @@ npm run dev
 ```bash
 http://127.0.0.1:8000
 ```
+```bash
+npm install
+npm install chromedriver@latest --save-dev
+npm install chromedriver@143 --save-dev
+
+(Get-Item "C:\Program Files\Google\Chrome\Application\chrome.exe").VersionInfo.ProductVersion
+
+npm run test:e2e
+npx mocha tests/Browser/specs/schedules.spec.js --timeout 60000
+```

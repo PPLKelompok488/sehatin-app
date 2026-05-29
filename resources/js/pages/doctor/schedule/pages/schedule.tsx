@@ -10,6 +10,7 @@ interface Patient {
     id: number;
     user: {
         name: string;
+        avatar?: string;
     };
 }
 
@@ -26,6 +27,7 @@ interface Appointment {
     status: 'booked' | 'completed' | 'cancelled';
     patient: Patient;
     poli: Poli | null;
+    avatar_url?: string | null;
 }
 
 interface Props {
@@ -34,7 +36,7 @@ interface Props {
     stats: {
         total_today: number;
         total_week: number;
-        next_patient: { id: number; name: string; time_slot: string } | null;
+        next_patient: { id: number; name: string; time_slot: string; avatar_url?: string | null } | null;
     };
     currentWeekStart: string;
 }
@@ -81,11 +83,15 @@ export default function DoctorSchedule({
         router.get(route('doctor.schedule'), { week_start: nextWeek }, { preserveScroll: true });
     };
 
-    const getAppointmentsForTimeSlot = (date: Date, time: string): Appointment[] => {
-        const dateStr = format(date, 'yyyy-MM-dd');
-        const appointments = upcomingAppointments[dateStr] || [];
-        return appointments.filter(apt => apt.start_time.startsWith(time));
-    };
+const getAppointmentsForTimeSlot = (date: Date, time: string): Appointment[] => {
+    const dateStr = format(date, 'yyyy-MM-dd');
+    const appointments = upcomingAppointments[dateStr] || [];
+    const slotHour = parseInt(time.split(':')[0]);
+    return appointments.filter(apt => {
+        const aptHour = parseInt(apt.start_time.split(':')[0]);
+        return aptHour === slotHour;
+    });
+};
 
     return (
         <AppLayout>
@@ -146,7 +152,15 @@ export default function DoctorSchedule({
                         >
                             <div className="flex items-center gap-5">
                                 <div className="w-11 h-11 rounded-xl overflow-hidden border border-white/30 flex-shrink-0 bg-white/10 flex items-center justify-center text-white font-bold text-sm">
-                                    {getInitials(stats.next_patient.name)}
+                                    {stats.next_patient.avatar_url ? (
+                                        <img
+                                            src={stats.next_patient.avatar_url}
+                                            alt={stats.next_patient.name}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    ) : (
+                                        getInitials(stats.next_patient.name)
+                                    )}
                                 </div>
                                 <div className="min-w-0">
                                     <p className="text-[10px] font-medium text-white/70 leading-none">
@@ -289,12 +303,20 @@ export default function DoctorSchedule({
                                                         >
                                                             <div className="flex items-center gap-2 mb-1">
                                                                 <div className={cn(
-                                                                    'w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0',
+                                                                    'w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 overflow-hidden',
                                                                     isNextPatient
                                                                         ? 'bg-white/20 text-white'
                                                                         : 'bg-primary/20 text-primary'
                                                                 )}>
-                                                                    {getInitials(appointments[0].patient.user.name)}
+                                                                    {appointments[0].avatar_url ? (
+                                                                        <img
+                                                                            src={appointments[0].avatar_url}
+                                                                            alt={appointments[0].patient.user.name}
+                                                                            className="w-full h-full object-cover"
+                                                                        />
+                                                                    ) : (
+                                                                        getInitials(appointments[0].patient.user.name)
+                                                                    )}
                                                                 </div>
                                                                 <span className="text-[10px] font-bold truncate leading-tight">
                                                                     {appointments[0].patient.user.name.length > 12
