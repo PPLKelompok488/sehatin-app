@@ -21,7 +21,7 @@ export default function AdminProfile({ user, status }: ProfileProps) {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [avatarPreview, setAvatarPreview] = useState<string | null>(user.avatar_url ?? null);
 
-    const { data, setData, processing, errors } = useForm({
+    const { data, setData, processing, errors, setError } = useForm({
         name: user.name,
         phone: user.phone ?? '',
         avatar: null,
@@ -54,19 +54,24 @@ export default function AdminProfile({ user, status }: ProfileProps) {
     };
 
         const submit: FormEventHandler = (e) => {
-        e.preventDefault();
-        router.post(route('profile.update'), {
-            _method: 'PATCH',
-            name: data.name,
-            phone: data.phone,
-            avatar: data.avatar,
-            password: data.password,
-            password_confirmation: data.password_confirmation,
-        }, {
-            forceFormData: true,
-            preserveScroll: true,
-        });
-    };
+            e.preventDefault();
+            router.post(route('profile.update'), {
+                _method: 'PATCH',
+                name: data.name,
+                phone: data.phone,
+                avatar: data.avatar,
+                password: data.password,
+                password_confirmation: data.password_confirmation,
+            }, {
+                forceFormData: true,
+                preserveScroll: true,
+                onError: (errors) => {
+                    Object.keys(errors).forEach((key) => {
+                        setError(key as keyof typeof data, errors[key]);
+                    });
+                },
+            });
+        };
 
     return (
         <AppLayout>
