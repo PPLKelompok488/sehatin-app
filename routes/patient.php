@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Patient\AppointmentController;
 use App\Http\Controllers\Patient\MedicalRecordController;
+use App\Http\Controllers\Patient\SettingsController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['role:patient'])->prefix('patient')->name('patient.')->group(function () {
@@ -22,4 +23,14 @@ Route::middleware(['role:patient'])->prefix('patient')->name('patient.')->group(
 
     Route::post('kunjungan/{id}/cancel', [AppointmentController::class, 'cancel'])
         ->name('kunjungan.cancel');
+
+    // Patient Settings
+    Route::prefix('settings')->name('settings.')->group(function () {
+        Route::get('profile', [SettingsController::class, 'editProfile'])
+            ->name('profile');
+        Route::post('profile', [SettingsController::class, 'updateProfile'])
+            ->name('profile.update');
+        Route::delete('profile/avatar', [SettingsController::class, 'destroyAvatar'])
+            ->name('profile.avatar.destroy');
+    });
 });

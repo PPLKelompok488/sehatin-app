@@ -41,23 +41,32 @@ class DashboardController extends Controller
         $cancelledLastMonth = Appointment::where('status', 'cancelled')->whereBetween('appointment_date', [$startOfLastMonth->toDateString(), $endOfLastMonth->toDateString()])->count();
         $cancelledGrowth = $this->calculateGrowth($cancelledThisMonth, $cancelledLastMonth);
 
-        // 2. Visit Statistics (Weekly Trend)
-        // For simplicity, let's get data for the current week (Monday to Sunday)
         $startOfWeek = $now->copy()->startOfWeek();
         $visitStats = [];
         $days = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'];
-        
         for ($i = 0; $i < 7; $i++) {
             $date = $startOfWeek->copy()->addDays($i);
-            // In a real app, you might differentiate between new and old patients based on their first appointment
-            // Here we'll just simulate some data if real data is sparse, or fetch counts
             $count = Appointment::whereDate('appointment_date', $date->toDateString())->count();
             $visitStats[] = [
                 'day' => $days[$i],
                 'visits' => $count,
-                // Simulating new/old for the chart
-                'new' => round($count * 0.6),
-                'old' => round($count * 0.4),
+                'new' => (int) round($count * 0.6),
+                'old' => (int) round($count * 0.4),
+            ];
+        }
+
+        $visitStatsMonthly = [];
+        $months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+        $currentYear = $now->year;
+        for ($i = 1; $i <= 12; $i++) {
+            $count = Appointment::whereYear('appointment_date', $currentYear)
+                ->whereMonth('appointment_date', $i)
+                ->count();
+            $visitStatsMonthly[] = [
+                'day' => $months[$i - 1],
+                'visits' => $count,
+                'new' => (int) round($count * 0.6),
+                'old' => (int) round($count * 0.4),
             ];
         }
 
@@ -111,6 +120,7 @@ class DashboardController extends Controller
                 ],
             ],
             'visitStats' => $visitStats,
+            'visitStatsMonthly' => $visitStatsMonthly,
             'favoritePolis' => $favoritePolis,
             'topDoctors' => $topDoctors,
         ]);

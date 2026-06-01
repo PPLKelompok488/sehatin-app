@@ -6,6 +6,7 @@ import AppLayout from '@/layouts/app-layout';
 import { cn } from '@/lib/utils';
 import { Head } from '@inertiajs/react';
 import { ArrowDownRight, ArrowUpRight, Calendar, CheckCircle2, Users, XCircle } from 'lucide-react';
+import { useState } from 'react';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 interface DashboardProps {
@@ -16,11 +17,14 @@ interface DashboardProps {
         cancelledVisits: { value: string; growth: number };
     };
     visitStats: Array<{ day: string; visits: number; new: number; old: number }>;
+    visitStatsMonthly: Array<{ day: string; visits: number; new: number; old: number }>;
     favoritePolis: Array<{ id: number; name: string; count: number; color: string }>;
     topDoctors: Array<{ name: string; specialization: string; count: number; avatar: string }>;
 }
 
-export default function AdminDashboard({ stats, visitStats, favoritePolis, topDoctors }: DashboardProps) {
+export default function AdminDashboard({ stats, visitStats, visitStatsMonthly, favoritePolis, topDoctors }: DashboardProps) {
+    const [filter, setFilter] = useState<'weekly' | 'monthly'>('weekly');
+    const activeData = filter === 'weekly' ? visitStats : visitStatsMonthly;
     return (
         <AppLayout>
             <Head title="Admin Dashboard" />
@@ -65,14 +69,39 @@ export default function AdminDashboard({ stats, visitStats, favoritePolis, topDo
                     />
                 </div>
 
-                {/* Main Chart */}
                 <Card className="overflow-hidden rounded-3xl border-none bg-white shadow-sm">
-                    <CardHeader className="flex flex-row items-center justify-between pb-8">
+                    <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between pb-8">
                         <div>
                             <CardTitle className="text-xl font-bold">Statistik Kunjungan</CardTitle>
-                            <p className="text-sm text-muted-foreground">Tren volume pasien mingguan</p>
+                            <p className="text-sm text-muted-foreground">
+                                {filter === 'weekly' ? 'Tren volume pasien mingguan' : 'Tren volume pasien bulanan'}
+                            </p>
                         </div>
-                        <div className="flex items-center gap-4 text-sm">
+                        <div className="flex flex-wrap items-center gap-4 text-sm">
+                            <div className="flex bg-slate-100 p-1 rounded-xl">
+                                <button
+                                    onClick={() => setFilter('weekly')}
+                                    className={cn(
+                                        "px-4 py-1.5 rounded-lg text-xs font-semibold transition-all",
+                                        filter === 'weekly'
+                                            ? "bg-white text-slate-800 shadow-sm"
+                                            : "text-slate-500 hover:text-slate-800"
+                                    )}
+                                >
+                                    Mingguan
+                                </button>
+                                <button
+                                    onClick={() => setFilter('monthly')}
+                                    className={cn(
+                                        "px-4 py-1.5 rounded-lg text-xs font-semibold transition-all",
+                                        filter === 'monthly'
+                                            ? "bg-white text-slate-800 shadow-sm"
+                                            : "text-slate-500 hover:text-slate-800"
+                                    )}
+                                >
+                                    Bulanan
+                                </button>
+                            </div>
                             <div className="flex items-center gap-2">
                                 <span className="h-3 w-3 rounded-full bg-primary/30"></span>
                                 <span className="text-muted-foreground">Pasien Baru</span>
@@ -85,7 +114,7 @@ export default function AdminDashboard({ stats, visitStats, favoritePolis, topDo
                     </CardHeader>
                     <CardContent className="h-[350px] px-2">
                         <ResponsiveContainer width="100%" height="100%">
-                            <AreaChart data={visitStats} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                            <AreaChart data={activeData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                                 <defs>
                                     <linearGradient id="colorVisits" x1="0" y1="0" x2="0" y2="1">
                                         <stop offset="5%" stopColor="var(--color-primary)" stopOpacity={0.1} />

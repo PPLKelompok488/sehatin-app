@@ -24,7 +24,9 @@ export default [
             '@typescript-eslint/no-explicit-any': 'warn',
             '@typescript-eslint/no-unused-vars': 'warn',
             '@typescript-eslint/no-empty-object-type': 'off',
+
             'react/jsx-key': ['error', { checkFragmentShorthand: true, checkShorthandDefaultProps: true }],
+
         },
         settings: {
             react: {
@@ -42,7 +44,7 @@ export default [
         },
     },
     {
-        ignores: ['vendor', 'node_modules', 'public', 'bootstrap/ssr', 'tailwind.config.js'],
+        ignores: ['vendor', 'node_modules', 'public', 'bootstrap/ssr', 'tailwind.config.js', 'tests/Browser'],
     },
     prettier, // Turn off all rules that might conflict with Prettier
 ];

@@ -3,6 +3,14 @@ import AppLayout from '@/layouts/app-layout';
 import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
 
+const getDoctorInitials = (name: string): string => {
+    const words = name.trim().split(/\s+/);
+    if (words.length >= 2) {
+        return (words[0][0] + words[1][0]).toUpperCase();
+    }
+    return name.slice(0, 2).toUpperCase();
+};
+
 interface MedicalRecord {
     subjective: string | null;
     objective: string | null;
@@ -20,6 +28,7 @@ interface AppointmentDetail {
     id: number;
     doctor_name: string;
     poli_name: string;
+    poli_icon: string;
     date: string;
     time: string;
     queue_number: string;
@@ -84,7 +93,7 @@ export default function DetailKunjungan({ appointment }: Props) {
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
                     <div className="flex items-center gap-4">
                         <div className="w-14 h-14 rounded-full overflow-hidden shrink-0 bg-primary/10 flex items-center justify-center">
-                            <span className="material-symbols-outlined text-primary text-[28px]">face</span>
+                            <span className="text-base font-extrabold text-primary">{getDoctorInitials(appointment.doctor_name)}</span>
                         </div>
                         <div>
                             <h2 className="text-xl font-extrabold text-on-surface">{appointment.doctor_name}</h2>
@@ -214,15 +223,7 @@ export default function DetailKunjungan({ appointment }: Props) {
                 </div>
             )}
 
-            {/* Footer Action */}
-            <div className="mt-8">
-                <Button variant="secondary" size="sm" asChild>
-                    <Link href={route('patient.kunjungan')}>
-                        <ArrowLeft className="size-4" />
-                        Kembali ke Riwayat
-                    </Link>
-                </Button>
-            </div>
+
         </AppLayout>
     );
 }
