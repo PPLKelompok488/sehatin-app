@@ -65,6 +65,10 @@ npm run dev
 ```
 
 ```bash
+php artisan schedule:work
+```
+
+```bash
 http://127.0.0.1:8000
 ```
 ```bash
