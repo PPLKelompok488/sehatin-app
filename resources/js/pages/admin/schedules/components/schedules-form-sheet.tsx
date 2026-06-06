@@ -136,8 +136,9 @@ export function SchedulesFormSheet({
                 {/* Waktu Mulai & Selesai */}
                 <div className="grid grid-cols-2 gap-6">
                     <div className="space-y-4">
-                        <Label className="text-sm font-bold text-on-surface/80 px-1">Waktu Mulai</Label>
+                        <Label htmlFor="start_time" className="text-sm font-bold text-on-surface/80 px-1">Waktu Mulai</Label>
                         <Input 
+                            id="start_time"
                             type="time" 
                             icon={Clock}
                             value={data.start_time}
@@ -151,8 +152,9 @@ export function SchedulesFormSheet({
                         {errors.start_time && <p className="text-destructive text-xs mt-1 px-1">{errors.start_time}</p>}
                     </div>
                     <div className="space-y-4">
-                        <Label className="text-sm font-bold text-on-surface/80 px-1">Waktu Selesai</Label>
+                        <Label htmlFor="end_time" className="text-sm font-bold text-on-surface/80 px-1">Waktu Selesai</Label>
                         <Input 
+                            id="end_time"
                             type="time" 
                             icon={Clock}
                             value={data.end_time}

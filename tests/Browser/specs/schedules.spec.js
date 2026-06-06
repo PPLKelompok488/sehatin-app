@@ -157,6 +157,28 @@ describe('Manajemen Jadwal Dokter', function () {
             const sheets = await driver.findElements(By.xpath("//div[@role='dialog']"));
             expect(sheets.length).to.equal(0);
         });
+
+        it('TC.MSC.002.006 — Submit form dengan waktu mulai lebih besar dari waktu selesai -> Muncul error validasi', async function () {
+            await driver.get(SCHEDULES_URL);
+            await clickTambahJadwal(driver);
+
+            const startTimeInput = await driver.findElement(By.id('start_time'));
+            const endTimeInput = await driver.findElement(By.id('end_time'));
+
+            await startTimeInput.sendKeys(Key.CONTROL, 'a');
+            await startTimeInput.sendKeys(Key.BACK_SPACE);
+            await startTimeInput.sendKeys('09:00');
+
+            await endTimeInput.sendKeys(Key.CONTROL, 'a');
+            await endTimeInput.sendKeys(Key.BACK_SPACE);
+            await endTimeInput.sendKeys('08:00');
+
+            await clickSimpan(driver);
+            await driver.sleep(500);
+
+            const errorMsg = await driver.findElement(By.xpath("//p[contains(., 'Waktu selesai harus lebih lambat dari waktu mulai')]"));
+            expect(await errorMsg.isDisplayed()).to.be.true;
+        });
     });
 
     describe('TS.MSC.003 — Edit Jadwal', function () {

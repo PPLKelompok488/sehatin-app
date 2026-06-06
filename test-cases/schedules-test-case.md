@@ -29,6 +29,7 @@
 | TS.MSC.002 | TC.MSC.002.003 | Manajemen dokter dalam sesi | Positive | Tambah lalu hapus dokter dari list | User di halaman Jadwal | 1. Klik tombol "Tambah Jadwal" 2. Klik "Tambah Dokter Ke Sesi" 3. Pilih dokter 4. Klik "X" di card dokter | Dokter muncul di list saat dipilih, terhapus saat klik X |
 | TS.MSC.002 | TC.MSC.002.004 | Tambah jadwal berhasil | Positive | Isi semua field valid lalu simpan | User di halaman Jadwal | 1. Klik tombol "Tambah Jadwal" 2. Isi semua field valid 3. Klik tombol "Simpan" | Form tertutup, jadwal baru muncul di list |
 | TS.MSC.002 | TC.MSC.002.005 | Batal tambah jadwal | Positive | Klik tombol Batal sebelum menyimpan | User di halaman Jadwal | 1. Klik tombol "Tambah Jadwal" 2. Klik tombol "Batal" | Form tertutup tanpa menyimpan data |
+| TS.MSC.002 | TC.MSC.002.006 | Validasi waktu mulai > waktu selesai | Negative | Submit form dengan waktu mulai lebih besar dari waktu selesai | User di halaman Jadwal | 1. Klik tombol "Tambah Jadwal" 2. Isi Waktu Mulai 09:00 3. Isi Waktu Selesai Akhir 08:00 4. Klik tombol "Simpan" | Sistem menolak penyimpanan jadwal praktik apabila jam mulai lebih besar dari jam selesai dan menampilkan pesan validasi kepada admin |
 
 ---
 
