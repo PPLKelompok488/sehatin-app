@@ -17,7 +17,7 @@ export type SchedulesFieldName = keyof SchedulesFormData;
 export const validateSchedule = (
     data: SchedulesFormData,
     setError: (key: keyof SchedulesFormData, message: string) => void,
-    clearErrors: (key?: keyof SchedulesFormData) => void
+    clearErrors: (key?: keyof SchedulesFormData) => void,
 ): boolean => {
     clearErrors();
     let isValid = true;
@@ -32,6 +32,10 @@ export const validateSchedule = (
     }
     if (!data.end_time) {
         setError('end_time', 'Waktu selesai wajib diisi');
+        isValid = false;
+    }
+    if (data.start_time && data.end_time && data.start_time >= data.end_time) {
+        setError('end_time', 'Waktu selesai harus lebih lambat dari waktu mulai');
         isValid = false;
     }
     if (!data.slot_duration || data.slot_duration <= 0) {
