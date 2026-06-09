@@ -23,7 +23,16 @@ class Appointment extends Model
         'status',
         'cancel_reason',
         'cancelled_by',
+        'reminder_sent',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'reminder_sent'    => 'boolean',
+            'appointment_date' => 'date',
+        ];
+    }
 
     public function patient(): BelongsTo
     {
