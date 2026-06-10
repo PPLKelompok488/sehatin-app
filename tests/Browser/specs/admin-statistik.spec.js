@@ -91,5 +91,29 @@ describe('Admin Statistik Dashboard', function () {
             const badgeTertinggi = await driver.findElement(By.xpath("//div[contains(text(), 'Tertinggi')]"));
             expect(await badgeTertinggi.isDisplayed()).to.be.true;
         });
+
+        it('TC.STAT.001.006 — Switch Filter Grafik ke Bulanan -> Menampilkan statistik kunjungan bulanan', async function () {
+            // Check default is weekly
+            const defaultSubTitle = await driver.findElement(By.xpath("//p[contains(text(), 'Tren volume pasien mingguan')]"));
+            expect(await defaultSubTitle.isDisplayed()).to.be.true;
+
+            // Click Bulanan
+            const btnBulanan = await driver.findElement(By.id('filter-monthly'));
+            await btnBulanan.click();
+            await driver.sleep(500);
+
+            // Verify it changed to monthly
+            const monthlySubTitle = await driver.findElement(By.xpath("//p[contains(text(), 'Tren volume pasien bulanan')]"));
+            expect(await monthlySubTitle.isDisplayed()).to.be.true;
+
+            // Switch back to weekly
+            const btnMingguan = await driver.findElement(By.id('filter-weekly'));
+            await btnMingguan.click();
+            await driver.sleep(500);
+
+            // Verify it changed back to weekly
+            const weeklySubTitle = await driver.findElement(By.xpath("//p[contains(text(), 'Tren volume pasien mingguan')]"));
+            expect(await weeklySubTitle.isDisplayed()).to.be.true;
+        });
     });
 });

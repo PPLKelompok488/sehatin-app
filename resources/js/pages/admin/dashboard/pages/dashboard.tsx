@@ -80,6 +80,7 @@ export default function AdminDashboard({ stats, visitStats, visitStatsMonthly, f
                         <div className="flex flex-wrap items-center gap-4 text-sm">
                             <div className="flex bg-slate-100 p-1 rounded-xl">
                                 <button
+                                    id="filter-weekly"
                                     onClick={() => setFilter('weekly')}
                                     className={cn(
                                         "px-4 py-1.5 rounded-lg text-xs font-semibold transition-all",
@@ -91,6 +92,7 @@ export default function AdminDashboard({ stats, visitStats, visitStatsMonthly, f
                                     Mingguan
                                 </button>
                                 <button
+                                    id="filter-monthly"
                                     onClick={() => setFilter('monthly')}
                                     className={cn(
                                         "px-4 py-1.5 rounded-lg text-xs font-semibold transition-all",
