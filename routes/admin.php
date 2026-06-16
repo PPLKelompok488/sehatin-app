@@ -34,4 +34,9 @@ Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(functi
         ->name('doctors.update');
     Route::delete('doctors/{id}', [\App\Http\Controllers\Admin\DoctorController::class, 'destroy'])
         ->name('doctors.destroy');
+
+    Route::get('theme', [\App\Http\Controllers\Admin\ThemeController::class, 'index'])
+        ->name('theme.index');
+    Route::post('theme', [\App\Http\Controllers\Admin\ThemeController::class, 'update'])
+        ->name('theme.update');
 });

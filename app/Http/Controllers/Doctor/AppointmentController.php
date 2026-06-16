@@ -36,8 +36,11 @@ class AppointmentController extends Controller
             ->whereDate('appointment_date', '<=', $weekEnd)
             ->orderBy('appointment_date', 'ASC')
             ->orderBy('start_time', 'ASC')
-            ->get()
-            ->groupBy('appointment_date');
+            ->get();
+
+        $upcomingAppointmentsGrouped = $upcomingAppointments->groupBy(function ($apt) {
+            return Carbon::parse($apt->appointment_date)->format('Y-m-d');
+        });
 
         // Total pasien minggu yang sedang dilihat
         $totalWeek = Appointment::where('doctor_id', $doctor->id)
@@ -69,7 +72,7 @@ class AppointmentController extends Controller
             ]);
         });
 
-        $upcomingAppointmentsTransformed = collect($upcomingAppointments)->map(function ($dayAppointments) {
+        $upcomingAppointmentsTransformed = collect($upcomingAppointmentsGrouped)->map(function ($dayAppointments) {
             return $dayAppointments->map(function ($apt) {
                 return array_merge($apt->toArray(), [
                     'avatar_url' => $apt->patient->user->avatar 
@@ -88,6 +91,7 @@ class AppointmentController extends Controller
                 'next_patient' => $nextPatient,
             ],
             'currentWeekStart' => $weekStart->toDateString(),
+            'schedules' => $doctor->schedules()->where('is_active', true)->get(),
         ]);
     }
 }
