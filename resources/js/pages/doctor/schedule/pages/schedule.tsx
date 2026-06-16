@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { router, Link } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { Head } from '@inertiajs/react';
-import { format, parseISO, addDays, isToday } from 'date-fns';
+import { format, addDays, isToday } from 'date-fns';
 import { id as idLocale } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 
@@ -30,6 +30,15 @@ interface Appointment {
     avatar_url?: string | null;
 }
 
+interface DoctorScheduleItem {
+    id: number;
+    day_of_week: string;
+    start_time: string;
+    end_time: string;
+    slot_duration: number;
+    is_active: boolean;
+}
+
 interface Props {
     todayAppointments: Appointment[];
     upcomingAppointments: Record<string, Appointment[]>;
@@ -39,9 +48,9 @@ interface Props {
         next_patient: { id: number; name: string; time_slot: string; avatar_url?: string | null } | null;
     };
     currentWeekStart: string;
+    schedules?: DoctorScheduleItem[];
 }
 
-const DOCTOR_HOURS = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00'];
 const DAY_NAMES = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'];
 const WEEKEND_INDICES = [5, 6];
 
@@ -61,17 +70,71 @@ function formatWeekRange(startDate: Date): string {
     return `${startStr} - ${endStr}`;
 }
 
+const timeToMinutes = (timeStr: string): number => {
+    const [h, m] = timeStr.split(':').map(Number);
+    return h * 60 + m;
+};
+
+const minutesToTimeStr = (minutes: number): string => {
+    const h = Math.floor(minutes / 60);
+    const m = minutes % 60;
+    return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+};
+
 export default function DoctorSchedule({
     todayAppointments,
     upcomingAppointments,
     stats,
     currentWeekStart,
+    schedules = [],
 }: Props) {
-    const weekStartDate = parseISO(currentWeekStart);
+    const weekStartDate = useMemo(() => {
+        const [year, month, day] = currentWeekStart.split('-').map(Number);
+        return new Date(year, month - 1, day);
+    }, [currentWeekStart]);
 
     const weekDays = useMemo(() => {
         return Array.from({ length: 7 }, (_, i) => addDays(weekStartDate, i));
-    }, [currentWeekStart]);
+    }, [weekStartDate]);
+
+    const timeSlots = useMemo(() => {
+        let minMin = timeToMinutes('08:00');
+        let maxMin = timeToMinutes('13:00');
+        let step = 15; // default 15 minutes duration
+
+        if (schedules && schedules.length > 0) {
+            const activeSchedules = schedules.filter(s => s.is_active);
+            if (activeSchedules.length > 0) {
+                const starts = activeSchedules.map(s => timeToMinutes(s.start_time));
+                const ends = activeSchedules.map(s => timeToMinutes(s.end_time));
+                minMin = Math.min(...starts);
+                maxMin = Math.max(...ends);
+                step = activeSchedules[0].slot_duration || 15;
+            }
+        }
+
+        // Build base slots from schedule interval
+        const slotSet = new Set<number>();
+        for (let m = minMin; m < maxMin; m += step) {
+            slotSet.add(m);
+        }
+
+        // Also include every actual appointment start time so off-interval
+        // bookings (e.g. 08:15 when step is 45 min) always show up
+        Object.values(upcomingAppointments).forEach(dayApts => {
+            dayApts.forEach(apt => {
+                const t = timeToMinutes(apt.start_time.substring(0, 5));
+                slotSet.add(t);
+                // Extend range if booking falls outside current window
+                if (t < minMin) minMin = t;
+                if (t >= maxMin) maxMin = t + step;
+            });
+        });
+
+        return Array.from(slotSet)
+            .sort((a, b) => a - b)
+            .map(minutesToTimeStr);
+    }, [schedules, upcomingAppointments]);
 
     const handlePreviousWeek = () => {
         const prevWeek = format(addDays(weekStartDate, -7), 'yyyy-MM-dd');
@@ -83,15 +146,14 @@ export default function DoctorSchedule({
         router.get(route('doctor.schedule'), { week_start: nextWeek }, { preserveScroll: true });
     };
 
-const getAppointmentsForTimeSlot = (date: Date, time: string): Appointment[] => {
-    const dateStr = format(date, 'yyyy-MM-dd');
-    const appointments = upcomingAppointments[dateStr] || [];
-    const slotHour = parseInt(time.split(':')[0]);
-    return appointments.filter(apt => {
-        const aptHour = parseInt(apt.start_time.split(':')[0]);
-        return aptHour === slotHour;
-    });
-};
+    const getAppointmentsForTimeSlot = (date: Date, time: string): Appointment[] => {
+        const dateStr = format(date, 'yyyy-MM-dd');
+        const appointments = upcomingAppointments[dateStr] || [];
+        return appointments.filter(apt => {
+            const aptTimeStr = apt.start_time.substring(0, 5);
+            return aptTimeStr === time;
+        });
+    };
 
     return (
         <AppLayout>
@@ -257,9 +319,14 @@ const getAppointmentsForTimeSlot = (date: Date, time: string): Appointment[] => 
 
                     {/* Grid Body */}
                     <div className="relative">
-                        {DOCTOR_HOURS.map((time, timeIdx) => (
+                        {timeSlots.map((time, timeIdx) => {
+                            const [slotH, slotM] = time.split(':').map(Number);
+                            const slotMinutes = slotH * 60 + slotM;
+                            const isLunchBreak = slotMinutes >= 12 * 60 && slotMinutes < 13 * 60;
+
+                            return (
                             <div key={timeIdx}>
-                                {time === '12:00' ? (
+                                {isLunchBreak ? (
                                     <div style={{ display: 'grid', gridTemplateColumns: '80px repeat(7, 1fr)' }}>
                                         <div className="p-4 text-xs font-bold text-on-surface-variant/40 border-b border-outline-variant/5 flex items-center justify-center">
                                             {time}
@@ -284,7 +351,7 @@ const getAppointmentsForTimeSlot = (date: Date, time: string): Appointment[] => 
                                                 appointments.length > 0 &&
                                                 appointments[0].status === 'booked' &&
                                                 isToday(date) &&
-                                                appointments[0].start_time === stats.next_patient?.time_slot;
+                                                appointments[0].start_time.substring(0, 5) === stats.next_patient?.time_slot?.substring(0, 5);
 
                                             return (
                                                 <div
@@ -332,7 +399,8 @@ const getAppointmentsForTimeSlot = (date: Date, time: string): Appointment[] => 
                                     </div>
                                 )}
                             </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             </main>

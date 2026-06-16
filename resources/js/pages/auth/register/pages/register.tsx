@@ -86,7 +86,7 @@ export default function Register() {
                         />
                     </div>
                     <div className="relative z-10 flex flex-col justify-center h-full text-left items-start">
-                        <BrandLogo className="mb-16" iconClassName="grayscale brightness-0 invert" size={10} />
+                        <BrandLogo className="mb-16" size={10} />
                         <h1 className="font-headline text-5xl font-extrabold text-white leading-tight tracking-tight mb-6 max-w-md">
                             Sehatin adalah platform kesehatan digital untuk klinik kecil.
                         </h1>
